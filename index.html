@@ -3,221 +3,566 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="xL1F3 Sites — a curated directory of public research and knowledge sources.">
-  <meta name="theme-color" content="#080b0a">
-  <title>xL1F3 Sites</title>
+  <meta name="description" content="xL1F3 Sites — Advanced Source Registry & Directory.">
+  <meta name="theme-color" content="#050505">
+  <title>xL1F3 Sites | Source Registry</title>
   <style>
-    :root{
-      --bg:#080b0a;
-      --panel:#0d1210;
-      --panel-2:#111814;
-      --line:#202a24;
-      --line-hover:#304037;
-      --text:#edf4ef;
-      --muted:#8d9a92;
-      --accent:#63ff9a;
-      --accent-soft:rgba(99,255,154,.09);
-      --shadow:0 20px 60px rgba(0,0,0,.28);
+    :root {
+      --bg-dark: #050505;
+      --bg-panel: rgba(20, 20, 25, 0.6);
+      --primary: #00f2ff; /* Cyan Neon */
+      --secondary: #bd00ff; /* Purple Neon */
+      --accent: #00ff9d; /* Green Neon */
+      --text-main: #ffffff;
+      --text-muted: #a0a0b0;
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glow: 0 0 20px rgba(0, 242, 255, 0.15);
+      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 50% -10%, rgba(99,255,154,.08), transparent 35%),
-        var(--bg);
-      color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      line-height:1.55;
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(189, 0, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(0, 242, 255, 0.08), transparent 25%);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    a{color:inherit}
-    .shell{width:min(1080px,calc(100% - 32px));margin:auto}
-    header{
-      position:sticky;top:0;z-index:10;
-      backdrop-filter:blur(16px);
-      background:rgba(8,11,10,.78);
-      border-bottom:1px solid rgba(255,255,255,.06);
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+    
+    .shell { width: min(1200px, calc(100% - 40px)); margin: auto; }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(5, 5, 5, 0.7);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 0;
     }
-    .nav{
-      min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    
+    .nav-container {
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;letter-spacing:-.02em}
-    .mark{
-      width:30px;height:30px;border:1px solid rgba(99,255,154,.65);
-      display:grid;place-items:center;border-radius:8px;
-      color:var(--accent);font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-      box-shadow:0 0 24px rgba(99,255,154,.08);
+
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em;
     }
-    .brand span{font-size:16px}
-    .nav-label{
-      color:var(--muted);font-size:13px;text-decoration:none;
-      transition:color .2s ease;
+    
+    .logo-box {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 8px;
+      display: grid; place-items: center;
+      color: #000; font-weight: 900; font-family: var(--font-mono);
+      box-shadow: var(--glow);
     }
-    .nav-label:hover{color:var(--text)}
-    main{padding:78px 0 90px}
-    .hero{max-width:760px;margin:0 auto 58px;text-align:center}
-    .eyebrow{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:6px 10px;border:1px solid var(--line);
-      border-radius:999px;color:var(--muted);font-size:12px;
-      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-      text-transform:uppercase;letter-spacing:.08em;
-      background:rgba(255,255,255,.015);
+
+    .nav-actions { display: flex; gap: 15px; }
+    
+    .btn-nav {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-muted);
     }
-    .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
-    h1{
-      margin:20px 0 13px;font-size:clamp(42px,7vw,76px);
-      line-height:.98;letter-spacing:-.065em;
+    .btn-nav:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(0, 242, 255, 0.05);
+      box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
     }
-    .hero p{margin:0 auto;color:var(--muted);font-size:16px;max-width:620px}
-    .categories{display:grid;gap:26px}
-    .category{
-      border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--panel),rgba(13,18,16,.72));
-      box-shadow:var(--shadow);overflow:hidden;
+
+    /* HERO SECTION */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+      position: relative;
     }
-    .category-head{
-      display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
-      padding:24px 25px 19px;border-bottom:1px solid var(--line);
+    
+    .hero::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
+      z-index: -1; pointer-events: none;
     }
-    .category-title{margin:0;font-size:21px;letter-spacing:-.025em}
-    .category-key{
-      color:var(--accent);font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;
-      text-transform:uppercase;letter-spacing:.1em;
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(189, 0, 255, 0.1);
+      border: 1px solid rgba(189, 0, 255, 0.3);
+      color: var(--secondary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
     }
-    .source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-    .source{
-      position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;
-      padding:20px 24px;text-decoration:none;border-bottom:1px solid var(--line);
-      transition:background .2s ease,transform .2s ease,border-color .2s ease;
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #fff, #a0a0b0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .source:nth-child(odd){border-right:1px solid var(--line)}
-    .source:nth-last-child(-n+2){border-bottom:0}
-    .source:only-child{border-bottom:0;border-right:0}
-    .source:hover{
-      background:var(--accent-soft);border-color:var(--line-hover);
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      font-size: 1.1rem;
     }
-    .source:active{transform:scale(.992)}
-    .source-name{font-weight:700;font-size:15px}
-    .source-url{
-      display:block;margin-top:3px;color:var(--muted);font:11px ui-monospace,SFMono-Regular,Menlo,monospace;
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:520px;
+
+    /* SEARCH BAR SIMULATION */
+    .search-wrapper {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
     }
-    .arrow{
-      flex:none;width:32px;height:32px;border:1px solid var(--line);
-      border-radius:9px;display:grid;place-items:center;color:var(--muted);
-      transition:color .2s ease,border-color .2s ease,transform .2s ease;
+    
+    .search-bar {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      color: white;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s;
     }
-    .source:hover .arrow{color:var(--accent);border-color:rgba(99,255,154,.4);transform:translate(2px,-2px)}
-    .empty-note{padding:18px 24px;color:var(--muted);font-size:13px}
-    .contact{
-      margin-top:28px;padding:23px 25px;border:1px solid var(--line);border-radius:18px;
-      background:var(--panel);display:flex;justify-content:space-between;align-items:center;gap:20px;
+    
+    .search-bar:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+      background: rgba(0,0,0,0.4);
     }
-    .contact strong{display:block;font-size:14px;margin-bottom:2px}
-    .contact span{color:var(--muted);font-size:13px}
-    .mail{
-      text-decoration:none;padding:10px 14px;border:1px solid var(--line);
-      border-radius:10px;font:600 12px ui-monospace,SFMono-Regular,Menlo,monospace;
-      transition:all .2s ease;white-space:nowrap;
+
+    /* CATEGORIES GRID */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      padding-bottom: 80px;
     }
-    .mail:hover{border-color:rgba(99,255,154,.45);color:var(--accent);background:var(--accent-soft)}
-    footer{
-      border-top:1px solid rgba(255,255,255,.06);padding:26px 0 34px;color:var(--muted);font-size:12px;
+
+    .card {
+      background: var(--bg-panel);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
     }
-    .footer-row{display:flex;justify-content:space-between;gap:20px;align-items:center}
-    .credit{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-    .credit b{color:var(--text)}
-    @media(max-width:700px){
-      .source-list{grid-template-columns:1fr}
-      .source:nth-child(odd){border-right:0}
-      .source:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
-      .source:last-child{border-bottom:0}
-      .contact,.footer-row{align-items:flex-start;flex-direction:column}
-      main{padding-top:55px}
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-cat {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    /* Category Specific Colors */
+    .cat-games .icon-cat { background: #ff0055; color: #ff0055; }
+    .cat-torrents .icon-cat { background: #ff9900; color: #ff9900; }
+    .cat-video .icon-cat { background: #00ccff; color: #00ccff; }
+    .cat-streaming .icon-cat { background: #bd00ff; color: #bd00ff; }
+    .cat-sports .icon-cat { background: #00ff9d; color: #00ff9d; }
+    .cat-books .icon-cat { background: #ffcc00; color: #ffcc00; }
+
+    .source-list {
+      padding: 10px;
+    }
+
+    .source-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      margin: 4px 0;
+      border-radius: 8px;
+      transition: background 0.2s;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .source-item:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .source-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .source-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .source-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    .btn-visit {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.1);
+      color: var(--text-main);
+      font-weight: 600;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s;
+    }
+
+    .source-item:hover .btn-visit {
+      opacity: 1;
+      transform: translateX(0);
+      background: var(--primary);
+      color: #000;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .footer-brand {
+      font-family: var(--font-mono);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .grid-container { grid-template-columns: 1fr; }
+      h1 { font-size: 2.5rem; }
+      .btn-visit { opacity: 1; transform: none; }
     }
   </style>
 </head>
 <body>
+
 <header>
-  <div class="shell nav">
-    <a class="brand" href="./" aria-label="xL1F3 Sites home">
-      <span class="mark">xL</span><span>xL1F3 Sites</span>
+  <div class="shell nav-container">
+    <a href="#" class="brand">
+      <div class="logo-box">xL</div>
+      <span>xL1F3 Sites</span>
     </a>
-    <a class="nav-label" href="mailto:xL1F3@proton.me">Contact</a>
+    <div class="nav-actions">
+      <a href="https://github.com/xL1F3" target="_blank" class="btn-nav">GitHub</a>
+      <a href="mailto:xL1F3@proton.me" class="btn-nav">Contact</a>
+    </div>
   </div>
 </header>
 
 <main class="shell">
+  
   <section class="hero">
-    <div class="eyebrow"><span class="dot"></span> source directory</div>
-    <h1>xL1F3 Sites</h1>
-    <p>A clean directory of public sources for books, academic research, archives and open knowledge. No unnecessary links. No external assets.</p>
-  </section>
-
-  <section class="categories" aria-label="Source categories">
-    <article class="category">
-      <div class="category-head">
-        <h2 class="category-title">Multi</h2>
-        <span class="category-key">multi</span>
-      </div>
-      <div class="source-list">
-        <a class="source" href="https://archive.org/" target="_blank" rel="noopener noreferrer">
-          <span><span class="source-name">Internet Archive</span><span class="source-url">archive.org</span></span>
-          <span class="arrow">↗</span>
-        </a>
-        <a class="source" href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">
-          <span><span class="source-name">Wikimedia Commons</span><span class="source-url">commons.wikimedia.org</span></span>
-          <span class="arrow">↗</span>
-        </a>
-      </div>
-    </article>
-
-    <article class="category">
-      <div class="category-head">
-        <h2 class="category-title">Books</h2>
-        <span class="category-key">books</span>
-      </div>
-      <div class="source-list">
-        <a class="source" href="https://openlibrary.org/" target="_blank" rel="noopener noreferrer">
-          <span><span class="source-name">Open Library</span><span class="source-url">openlibrary.org</span></span>
-          <span class="arrow">↗</span>
-        </a>
-      </div>
-    </article>
-
-    <article class="category">
-      <div class="category-head">
-        <h2 class="category-title">Academic</h2>
-        <span class="category-key">academic</span>
-      </div>
-      <div class="source-list">
-        <a class="source" href="https://api.crossref.org/" target="_blank" rel="noopener noreferrer">
-          <span><span class="source-name">Crossref</span><span class="source-url">api.crossref.org</span></span>
-          <span class="arrow">↗</span>
-        </a>
-        <a class="source" href="https://export.arxiv.org/" target="_blank" rel="noopener noreferrer">
-          <span><span class="source-name">arXiv</span><span class="source-url">export.arxiv.org</span></span>
-          <span class="arrow">↗</span>
-        </a>
-      </div>
-    </article>
-  </section>
-
-  <section class="contact">
-    <div>
-      <strong>Contact xL1F3 Software</strong>
-      <span>For questions, corrections or source-related contact.</span>
+    <div class="badge">Source Registry v2.0</div>
+    <h1>Curated Digital Access</h1>
+    <p>Advanced directory for games, media, books, and research. Powered by xL1F3 Software intelligence.</p>
+    
+    <div class="search-wrapper">
+      <input type="text" class="search-bar" placeholder="Search sources or categories...">
     </div>
-    <a class="mail" href="mailto:xL1F3@proton.me">xL1F3@proton.me</a>
   </section>
+
+  <section class="grid-container">
+
+    <!-- GAMES -->
+    <article class="card cat-games">
+      <div class="card-header">
+        <div class="card-title"><div class="icon-cat"></div> Games</div>
+      </div>
+      <div class="source-list">
+        <a href="https://www.elamigosweb.net/" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">ElAmigos Web</span>
+            <span class="source-meta">Multi | Priority 1</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://www.elamigosgames.net" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">ElAmigos Games</span>
+            <span class="source-meta">Multi | Priority 1</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://steamunlocked.org" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">SteamUnlocked</span>
+            <span class="source-meta">Multi | Direct DL</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://www.gamestorrents.app" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">GameTorrents</span>
+            <span class="source-meta">Multi | Torrent</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://gamesfull.app" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">GamesFull</span>
+            <span class="source-meta">Multi | ISO/Rep</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://repack.info/es/" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">Repack Info</span>
+            <span class="source-meta">Spanish | Repacks</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://gtorr.net" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">GTorr</span>
+            <span class="source-meta">Multi | Torrent</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://fitgirl-repacks.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">FitGirl Repacks</span>
+            <span class="source-meta">Multi | Highly Compressed</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- TORRENTS -->
+    <article class="card cat-torrents">
+      <div class="card-header">
+        <div class="card-title"><div class="icon-cat"></div> General Torrents</div>
+      </div>
+      <div class="source-list">
+        <a href="https://1337x.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">1337x</span>
+            <span class="source-meta">General Purpose</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://kickasstorrents.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">KickassTorrents</span>
+            <span class="source-meta">Legacy / Mirror</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://thepiratebay.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">The Pirate Bay</span>
+            <span class="source-meta">The Classic</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://limetorrents.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">LimeTorrents</span>
+            <span class="source-meta">Lightweight</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://extratorrent.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">ExtraTorrent</span>
+            <span class="source-meta">Archive / Mirror</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- VIDEO & STREAMING -->
+    <article class="card cat-video">
+      <div class="card-header">
+        <div class="card-title"><div class="icon-cat"></div> Movies & Video</div>
+      </div>
+      <div class="source-list">
+        <a href="https://yts.unblockninja.st" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">YTS (YIFY)</span>
+            <span class="source-meta">Movies | Small Size</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="card cat-streaming">
+      <div class="card-header">
+        <div class="card-title"><div class="icon-cat"></div> Streaming</div>
+      </div>
+      <div class="source-list">
+        <a href="https://ccuevana3.tv" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">Cuevana3</span>
+            <span class="source-meta">Spanish | HD</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://fullpelis.pro" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">FullPelis</span>
+            <span class="source-meta">Spanish | Catalog</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://pelisplus247.com" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">PelisPlus247</span>
+            <span class="source-meta">Spanish | 24/7</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://cinehype.sc" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">CineHype</span>
+            <span class="source-meta">Multi | Quality</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- SPORTS -->
+    <article class="card cat-sports">
+      <div class="card-header">
+        <div class="card-title"><div class="icon-cat"></div> Sports Live</div>
+      </div>
+      <div class="source-list">
+        <a href="https://tarjetaroja.digital" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">Tarjeta Roja</span>
+            <span class="source-meta">Spanish | Live</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://rojadirectatvplus.net" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">RojaDirecta TV+</span>
+            <span class="source-meta">Spanish | Aggregator</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://streameasto.cx" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">StreamEast</span>
+            <span class="source-meta">English | HD</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://elkoragoal.com/goal/" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">ElKoraGoal</span>
+            <span class="source-meta">Arabic | Football</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+      </div>
+    </article>
+
+    <!-- BOOKS -->
+    <article class="card cat-books">
+      <div class="card-header">
+        <div class="card-title"><div class="icon-cat"></div> Books & Archives</div>
+      </div>
+      <div class="source-list">
+        <a href="https://annas-archive.cc" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">Anna's Archive (.cc)</span>
+            <span class="source-meta">Shadow Library</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+        <a href="https://annas-archive.pk" target="_blank" class="source-item">
+          <div class="source-info">
+            <span class="source-name">Anna's Archive (.pk)</span>
+            <span class="source-meta">Mirror / Backup</span>
+          </div>
+          <span class="btn-visit">Visit</span>
+        </a>
+      </div>
+    </article>
+
+  </section>
+
+  <section style="text-align:center; margin-bottom: 60px;">
+    <a href="mailto:xL1F3@proton.me" style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; background:linear-gradient(90deg, var(--primary), var(--secondary)); color:#000; font-weight:700; border-radius:30px; box-shadow:0 0 20px rgba(0,242,255,0.4);">
+      <span>Contact xL1F3 Software</span>
+      <span>→</span>
+    </a>
+  </section>
+
 </main>
 
 <footer>
-  <div class="shell footer-row">
-    <span>xL1F3 Sites</span>
-    <span class="credit">by <b>xL1F3 software</b></span>
+  <div class="shell">
+    <p>&copy; 2026 xL1F3 Sites. All rights reserved.</p>
+    <p class="footer-brand">by xL1F3 software</p>
   </div>
 </footer>
+
 </body>
 </html>
