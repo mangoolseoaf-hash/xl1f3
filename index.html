@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="xL1F3 Sites — a curated directory of public research and knowledge sources.">
+  <meta name="theme-color" content="#080b0a">
+  <title>xL1F3 Sites</title>
+  <style>
+    :root{
+      --bg:#080b0a;
+      --panel:#0d1210;
+      --panel-2:#111814;
+      --line:#202a24;
+      --line-hover:#304037;
+      --text:#edf4ef;
+      --muted:#8d9a92;
+      --accent:#63ff9a;
+      --accent-soft:rgba(99,255,154,.09);
+      --shadow:0 20px 60px rgba(0,0,0,.28);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(99,255,154,.08), transparent 35%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.55;
+    }
+    a{color:inherit}
+    .shell{width:min(1080px,calc(100% - 32px));margin:auto}
+    header{
+      position:sticky;top:0;z-index:10;
+      backdrop-filter:blur(16px);
+      background:rgba(8,11,10,.78);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav{
+      min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+    }
+    .brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;letter-spacing:-.02em}
+    .mark{
+      width:30px;height:30px;border:1px solid rgba(99,255,154,.65);
+      display:grid;place-items:center;border-radius:8px;
+      color:var(--accent);font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+      box-shadow:0 0 24px rgba(99,255,154,.08);
+    }
+    .brand span{font-size:16px}
+    .nav-label{
+      color:var(--muted);font-size:13px;text-decoration:none;
+      transition:color .2s ease;
+    }
+    .nav-label:hover{color:var(--text)}
+    main{padding:78px 0 90px}
+    .hero{max-width:760px;margin:0 auto 58px;text-align:center}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border:1px solid var(--line);
+      border-radius:999px;color:var(--muted);font-size:12px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      text-transform:uppercase;letter-spacing:.08em;
+      background:rgba(255,255,255,.015);
+    }
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+    h1{
+      margin:20px 0 13px;font-size:clamp(42px,7vw,76px);
+      line-height:.98;letter-spacing:-.065em;
+    }
+    .hero p{margin:0 auto;color:var(--muted);font-size:16px;max-width:620px}
+    .categories{display:grid;gap:26px}
+    .category{
+      border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--panel),rgba(13,18,16,.72));
+      box-shadow:var(--shadow);overflow:hidden;
+    }
+    .category-head{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:20px;
+      padding:24px 25px 19px;border-bottom:1px solid var(--line);
+    }
+    .category-title{margin:0;font-size:21px;letter-spacing:-.025em}
+    .category-key{
+      color:var(--accent);font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;
+      text-transform:uppercase;letter-spacing:.1em;
+    }
+    .source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .source{
+      position:relative;display:flex;align-items:center;justify-content:space-between;gap:18px;
+      padding:20px 24px;text-decoration:none;border-bottom:1px solid var(--line);
+      transition:background .2s ease,transform .2s ease,border-color .2s ease;
+    }
+    .source:nth-child(odd){border-right:1px solid var(--line)}
+    .source:nth-last-child(-n+2){border-bottom:0}
+    .source:only-child{border-bottom:0;border-right:0}
+    .source:hover{
+      background:var(--accent-soft);border-color:var(--line-hover);
+    }
+    .source:active{transform:scale(.992)}
+    .source-name{font-weight:700;font-size:15px}
+    .source-url{
+      display:block;margin-top:3px;color:var(--muted);font:11px ui-monospace,SFMono-Regular,Menlo,monospace;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:520px;
+    }
+    .arrow{
+      flex:none;width:32px;height:32px;border:1px solid var(--line);
+      border-radius:9px;display:grid;place-items:center;color:var(--muted);
+      transition:color .2s ease,border-color .2s ease,transform .2s ease;
+    }
+    .source:hover .arrow{color:var(--accent);border-color:rgba(99,255,154,.4);transform:translate(2px,-2px)}
+    .empty-note{padding:18px 24px;color:var(--muted);font-size:13px}
+    .contact{
+      margin-top:28px;padding:23px 25px;border:1px solid var(--line);border-radius:18px;
+      background:var(--panel);display:flex;justify-content:space-between;align-items:center;gap:20px;
+    }
+    .contact strong{display:block;font-size:14px;margin-bottom:2px}
+    .contact span{color:var(--muted);font-size:13px}
+    .mail{
+      text-decoration:none;padding:10px 14px;border:1px solid var(--line);
+      border-radius:10px;font:600 12px ui-monospace,SFMono-Regular,Menlo,monospace;
+      transition:all .2s ease;white-space:nowrap;
+    }
+    .mail:hover{border-color:rgba(99,255,154,.45);color:var(--accent);background:var(--accent-soft)}
+    footer{
+      border-top:1px solid rgba(255,255,255,.06);padding:26px 0 34px;color:var(--muted);font-size:12px;
+    }
+    .footer-row{display:flex;justify-content:space-between;gap:20px;align-items:center}
+    .credit{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .credit b{color:var(--text)}
+    @media(max-width:700px){
+      .source-list{grid-template-columns:1fr}
+      .source:nth-child(odd){border-right:0}
+      .source:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+      .source:last-child{border-bottom:0}
+      .contact,.footer-row{align-items:flex-start;flex-direction:column}
+      main{padding-top:55px}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="shell nav">
+    <a class="brand" href="./" aria-label="xL1F3 Sites home">
+      <span class="mark">xL</span><span>xL1F3 Sites</span>
+    </a>
+    <a class="nav-label" href="mailto:xL1F3@proton.me">Contact</a>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span> source directory</div>
+    <h1>xL1F3 Sites</h1>
+    <p>A clean directory of public sources for books, academic research, archives and open knowledge. No unnecessary links. No external assets.</p>
+  </section>
+
+  <section class="categories" aria-label="Source categories">
+    <article class="category">
+      <div class="category-head">
+        <h2 class="category-title">Multi</h2>
+        <span class="category-key">multi</span>
+      </div>
+      <div class="source-list">
+        <a class="source" href="https://archive.org/" target="_blank" rel="noopener noreferrer">
+          <span><span class="source-name">Internet Archive</span><span class="source-url">archive.org</span></span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="source" href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">
+          <span><span class="source-name">Wikimedia Commons</span><span class="source-url">commons.wikimedia.org</span></span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="category">
+      <div class="category-head">
+        <h2 class="category-title">Books</h2>
+        <span class="category-key">books</span>
+      </div>
+      <div class="source-list">
+        <a class="source" href="https://openlibrary.org/" target="_blank" rel="noopener noreferrer">
+          <span><span class="source-name">Open Library</span><span class="source-url">openlibrary.org</span></span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="category">
+      <div class="category-head">
+        <h2 class="category-title">Academic</h2>
+        <span class="category-key">academic</span>
+      </div>
+      <div class="source-list">
+        <a class="source" href="https://api.crossref.org/" target="_blank" rel="noopener noreferrer">
+          <span><span class="source-name">Crossref</span><span class="source-url">api.crossref.org</span></span>
+          <span class="arrow">↗</span>
+        </a>
+        <a class="source" href="https://export.arxiv.org/" target="_blank" rel="noopener noreferrer">
+          <span><span class="source-name">arXiv</span><span class="source-url">export.arxiv.org</span></span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+    </article>
+  </section>
+
+  <section class="contact">
+    <div>
+      <strong>Contact xL1F3 Software</strong>
+      <span>For questions, corrections or source-related contact.</span>
+    </div>
+    <a class="mail" href="mailto:xL1F3@proton.me">xL1F3@proton.me</a>
+  </section>
+</main>
+
+<footer>
+  <div class="shell footer-row">
+    <span>xL1F3 Sites</span>
+    <span class="credit">by <b>xL1F3 software</b></span>
+  </div>
+</footer>
+</body>
+</html>
