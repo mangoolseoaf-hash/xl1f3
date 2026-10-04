@@ -1,568 +1,641 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="xL1F3 Sites — Advanced Source Registry & Directory.">
-  <meta name="theme-color" content="#050505">
-  <title>xL1F3 Sites | Source Registry</title>
-  <style>
-    :root {
-      --bg-dark: #050505;
-      --bg-panel: rgba(20, 20, 25, 0.6);
-      --primary: #00f2ff; /* Cyan Neon */
-      --secondary: #bd00ff; /* Purple Neon */
-      --accent: #00ff9d; /* Green Neon */
-      --text-main: #ffffff;
-      --text-muted: #a0a0b0;
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glow: 0 0 20px rgba(0, 242, 255, 0.15);
-      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="xL1F3 Links — Digital Source Registry by xL1F3 software.">
+<meta name="theme-color" content="#050607">
+<title>xL1F3 Links by xL1F3 software</title>
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 15% 50%, rgba(189, 0, 255, 0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(0, 242, 255, 0.08), transparent 25%);
-      color: var(--text-main);
-      font-family: var(--font-main);
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-dark); }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+<style>
+:root{
+  --bg:#030405;
+  --panel:rgba(10,13,16,.85);
+  --panel-hover:rgba(15,20,24,.95);
+  --line:rgba(255,255,255,.08);
+  --line-active:rgba(0,255,120,.3);
+  --text:#eef2f0;
+  --muted:#6b7a74;
+  --green:#00ff78;
+  --cyan:#00eaff;
+  --purple:#a855ff;
+  --danger:#ff4d67;
+  --yellow:#ffd84d;
+  --mono:"JetBrains Mono","Fira Code",Consolas,monospace;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  
+  /* Dynamic Cursor Vars */
+  --mx:50%;
+  --my:50%;
+}
 
-    a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
-    
-    .shell { width: min(1200px, calc(100% - 40px)); margin: auto; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--text);
+  font-family:var(--sans);
+  background:var(--bg);
+  position:relative;
+}
 
-    /* HEADER */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      backdrop-filter: blur(12px);
-      background: rgba(5, 5, 5, 0.7);
-      border-bottom: 1px solid var(--glass-border);
-      padding: 15px 0;
-    }
-    
-    .nav-container {
-      display: flex; justify-content: space-between; align-items: center;
-    }
+/* Background Grid & Glow */
+body::before {
+  content:"";position:fixed;inset:0;z-index:-2;
+  background-image: 
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.15;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+body::after {
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background: radial-gradient(800px circle at var(--mx) var(--my), rgba(0,255,120,.06), transparent 40%);
+  transition: background .1s ease-out;
+}
 
-    .brand {
-      display: flex; align-items: center; gap: 12px;
-      font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em;
-    }
-    
-    .logo-box {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border-radius: 8px;
-      display: grid; place-items: center;
-      color: #000; font-weight: 900; font-family: var(--font-mono);
-      box-shadow: var(--glow);
-    }
+::selection{background:var(--green);color:#000}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#0a0c0e}
+::-webkit-scrollbar-thumb{background:#26312c;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--green)}
 
-    .nav-actions { display: flex; gap: 15px; }
-    
-    .btn-nav {
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border: 1px solid var(--glass-border);
-      background: rgba(255,255,255,0.03);
-      color: var(--text-muted);
-    }
-    .btn-nav:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: rgba(0, 242, 255, 0.05);
-      box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-    }
+a{text-decoration:none;color:inherit}
+button,input{font:inherit;border:none;background:none}
+button{cursor:pointer}
 
-    /* HERO SECTION */
-    .hero {
-      text-align: center;
-      padding: 80px 0 60px;
-      position: relative;
-    }
-    
-    .hero::before {
-      content: ''; position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(0, 242, 255, 0.05) 0%, transparent 70%);
-      z-index: -1; pointer-events: none;
-    }
+.shell{width:min(1200px, calc(100% - 32px));margin:auto;}
 
-    .badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      background: rgba(189, 0, 255, 0.1);
-      border: 1px solid rgba(189, 0, 255, 0.3);
-      color: var(--secondary);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 20px;
-    }
+/* --- Custom Cursor Elements --- */
+.cursor-glow {
+  position: fixed; left: 0; top: 0; width: 400px; height: 400px; border-radius: 50%;
+  pointer-events: none; z-index: 0; transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0,255,120,.08), transparent 60%);
+  mix-blend-mode: screen;
+  transition: opacity .3s;
+}
+.cursor-dot {
+  position: fixed; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 15px var(--green); pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform .1s cubic-bezier(.1,.6,.3,1);
+}
+@media (hover: none) { .cursor-glow, .cursor-dot { display: none; } }
 
-    h1 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      line-height: 1.1;
-      margin-bottom: 20px;
-      background: linear-gradient(to right, #fff, #a0a0b0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+/* --- Boot Screen / Gate --- */
+.boot-screen {
+  position: fixed; inset: 0; background: #000; z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); color: var(--green);
+  transition: opacity .8s ease, visibility .8s;
+}
+.boot-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.boot-content { max-width: 600px; width: 100%; padding: 20px; text-align: center; }
+.boot-line { margin-bottom: 8px; opacity: 0; transform: translateY(10px); transition: all .3s; font-size: 14px; }
+.boot-line.visible { opacity: 1; transform: translateY(0); }
+.boot-cursor { display: inline-block; width: 8px; height: 15px; background: var(--green); animation: blink 1s infinite; vertical-align: middle; margin-left: 5px; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-    .hero p {
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 40px;
-      font-size: 1.1rem;
-    }
+.access-btn {
+  margin-top: 30px; padding: 12px 24px; border: 1px solid var(--green);
+  background: rgba(0,255,120,.05); color: var(--green);
+  font-family: var(--mono); font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em;
+  cursor: pointer; transition: all .3s;
+  box-shadow: 0 0 20px rgba(0,255,120,.1);
+  opacity: 0; transform: scale(0.9);
+}
+.access-btn.show { opacity: 1; transform: scale(1); }
+.access-btn:hover { background: var(--green); color: #000; box-shadow: 0 0 30px rgba(0,255,120,.3); }
 
-    /* SEARCH BAR SIMULATION */
-    .search-wrapper {
-      max-width: 500px;
-      margin: 0 auto;
-      position: relative;
-    }
-    
-    .search-bar {
-      width: 100%;
-      padding: 16px 20px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--glass-border);
-      color: white;
-      font-family: var(--font-main);
-      font-size: 1rem;
-      outline: none;
-      transition: all 0.3s;
-    }
-    
-    .search-bar:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
-      background: rgba(0,0,0,0.4);
-    }
+/* --- Header --- */
+header {
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(12px);
+  background: rgba(3,4,5,.7);
+  border-bottom: 1px solid var(--line);
+}
+.nav { height: 70px; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo-box {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: linear-gradient(135deg, #0a0f0c, #050806);
+  border: 1px solid var(--line-active);
+  display: grid; place-items: center;
+  box-shadow: 0 0 20px rgba(0,255,120,.1);
+  position: relative; overflow: hidden;
+}
+.logo-box::after {
+  content:''; position:absolute; inset:0;
+  background: conic-gradient(from 0deg, transparent, var(--green), transparent 30%);
+  animation: spin 4s linear infinite; opacity: .3;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.logo-svg { width: 20px; height: 20px; fill: var(--green); z-index: 1; }
+.brand-text h1 { font-size: 16px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
+.brand-text span { font-size: 10px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.brand-text b { color: var(--green); }
 
-    /* CATEGORIES GRID */
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 30px;
-      padding-bottom: 80px;
-    }
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.btn-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 1px solid var(--line); background: rgba(255,255,255,.03);
+  display: grid; place-items: center; color: var(--muted);
+  transition: all .2s;
+}
+.btn-icon:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,120,.05); }
+.btn-icon.active { border-color: var(--green); color: var(--green); box-shadow: 0 0 15px rgba(0,255,120,.2); }
 
-    .card {
-      background: var(--bg-panel);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
+/* --- Hero Section --- */
+.hero { padding: 80px 0 60px; text-align: center; position: relative; }
+.kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 20px;
+  background: rgba(0,255,120,.05); border: 1px solid rgba(0,255,120,.2);
+  font-family: var(--mono); font-size: 11px; color: var(--green);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 24px;
+}
+.kicker::before { content:''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1;
+  margin-bottom: 16px; letter-spacing: -.03em;
+  font-family: var(--mono); /* Typewriter feel */
+  color: var(--text);
+}
+.typewriter-caret {
+  display: inline-block; width: 3px; height: 1em; background: var(--green);
+  vertical-align: middle; margin-left: 5px;
+  animation: blink 1s step-end infinite;
+}
+.hero-subtitle { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+.credit-tag { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 20px; }
+.credit-tag strong { color: var(--text); }
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.15);
-    }
+/* Search Bar */
+.search-container { position: relative; max-width: 600px; margin: 0 auto; }
+.search-input {
+  width: 100%; padding: 16px 20px 16px 50px;
+  background: rgba(10,13,16,.6); border: 1px solid var(--line);
+  border-radius: 12px; color: var(--text); font-size: 16px;
+  transition: all .3s; outline: none;
+}
+.search-input:focus { border-color: var(--green); background: rgba(10,13,16,.9); box-shadow: 0 0 0 4px rgba(0,255,120,.1); }
+.search-icon-pos { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
 
-    .card-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--glass-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.02);
-    }
+/* Stats */
+.stats-row { display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
+.stat-item { text-align: center; }
+.stat-val { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--text); display: block; }
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
 
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+/* --- Main Grid --- */
+.grid-section { padding-bottom: 80px; }
+.category-card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 16px; margin-bottom: 24px; overflow: hidden;
+  transition: transform .3s, border-color .3s, box-shadow .3s;
+  position: relative;
+}
+.category-card:hover {
+  border-color: var(--line-active);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
+}
+.card-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,.02);
+}
+.cat-title-group { display: flex; align-items: center; gap: 10px; }
+.cat-dot { width: 8px; height: 8px; border-radius: 50%; }
+.cat-name { font-weight: 600; font-size: 15px; }
+.cat-count { font-family: var(--mono); font-size: 11px; color: var(--muted); background: rgba(255,255,255,.05); padding: 2px 8px; border-radius: 4px; }
 
-    .icon-cat {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      box-shadow: 0 0 10px currentColor;
-    }
+.source-list { padding: 8px; }
+.source-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-radius: 10px;
+  transition: background .2s;
+}
+.source-item:hover { background: rgba(255,255,255,.04); }
+.source-info { display: flex; flex-direction: column; gap: 2px; }
+.source-name { font-weight: 500; font-size: 14px; color: var(--text); }
+.source-desc { font-size: 12px; color: var(--muted); }
+.source-actions { display: flex; align-items: center; gap: 12px; }
 
-    /* Category Specific Colors */
-    .cat-games .icon-cat { background: #ff0055; color: #ff0055; }
-    .cat-torrents .icon-cat { background: #ff9900; color: #ff9900; }
-    .cat-video .icon-cat { background: #00ccff; color: #00ccff; }
-    .cat-streaming .icon-cat { background: #bd00ff; color: #bd00ff; }
-    .cat-sports .icon-cat { background: #00ff9d; color: #00ff9d; }
-    .cat-books .icon-cat { background: #ffcc00; color: #ffcc00; }
+.status-badge {
+  font-family: var(--mono); font-size: 10px; padding: 4px 8px;
+  border-radius: 6px; border: 1px solid rgba(0,255,120,.3);
+  display: flex; align-items: center; gap: 6px; min-width: 80px; justify-content: center;
+  color: var(--green); background: rgba(0,255,120,.05);
+}
+.status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
 
-    .source-list {
-      padding: 10px;
-    }
+.visit-btn {
+  padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  background: rgba(255,255,255,.05); color: var(--text);
+  border: 1px solid var(--line); transition: all .2s;
+}
+.visit-btn:hover { background: var(--green); color: #000; border-color: var(--green); box-shadow: 0 0 15px rgba(0,255,120,.3); }
 
-    .source-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      margin: 4px 0;
-      border-radius: 8px;
-      transition: background 0.2s;
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
+.no-results-msg { text-align: center; padding: 40px; color: var(--muted); font-family: var(--mono); display: none; }
+.no-results-msg.show { display: block; }
 
-    .source-item:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.1);
-    }
+/* Footer */
+footer { border-top: 1px solid var(--line); padding: 40px 0; text-align: center; background: rgba(0,0,0,.2); }
+.footer-brand { font-family: var(--mono); font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+.footer-brand strong { color: var(--green); }
+.footer-contact {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 15px; padding: 10px 20px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: rgba(255,255,255,.02);
+  font-family: var(--mono); font-size: 13px; color: var(--text);
+  transition: all .3s;
+}
+.footer-contact:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,120,.05); }
+.footer-arrow { color: var(--green); font-weight: bold; }
 
-    .source-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .source-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--text-main);
-    }
-
-    .source-meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      margin-top: 2px;
-    }
-
-    .btn-visit {
-      padding: 6px 12px;
-      font-size: 0.75rem;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.1);
-      color: var(--text-main);
-      font-weight: 600;
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: all 0.3s;
-    }
-
-    .source-item:hover .btn-visit {
-      opacity: 1;
-      transform: translateX(0);
-      background: var(--primary);
-      color: #000;
-    }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--glass-border);
-      padding: 40px 0;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-    
-    .footer-brand {
-      font-family: var(--font-mono);
-      color: var(--text-main);
-      font-weight: 700;
-    }
-
-    @media (max-width: 768px) {
-      .grid-container { grid-template-columns: 1fr; }
-      h1 { font-size: 2.5rem; }
-      .btn-visit { opacity: 1; transform: none; }
-    }
-  </style>
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.2rem; }
+  .stats-row { gap: 15px; }
+  .source-item { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .source-actions { width: 100%; justify-content: space-between; }
+  .brand-text span { display: none; }
+}
+</style>
 </head>
 <body>
 
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- Boot Screen / Access Gate -->
+<div class="boot-screen" id="bootScreen">
+  <div class="boot-content">
+    <div class="boot-line" id="bl1">&gt; Initializing xL1F3 Core...</div>
+    <div class="boot-line" id="bl2">&gt; Loading Source Registry...</div>
+    <div class="boot-line" id="bl3">&gt; Verifying Integrity... [OK]</div>
+    <div class="boot-line" id="bl4">&gt; System Ready.<span class="boot-cursor"></span></div>
+    
+    <button class="access-btn" id="accessBtn">ACCESS LINKS →</button>
+  </div>
+</div>
+
 <header>
-  <div class="shell nav-container">
-    <a href="#" class="brand">
-      <div class="logo-box">xL</div>
-      <span>xL1F3 Sites</span>
-    </a>
+  <div class="shell nav">
+    <div class="brand">
+      <div class="logo-box">
+        <svg class="logo-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>xL1F3 <b>Links</b></h1>
+        <span>by xL1F3 software</span>
+      </div>
+    </div>
     <div class="nav-actions">
-      <a href="https://github.com/xL1F3" target="_blank" class="btn-nav">GitHub</a>
-      <a href="mailto:xL1F3@proton.me" class="btn-nav">Contact</a>
+      <button class="btn-icon" id="soundToggle" title="Toggle Audio">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+      </button>
+      <a href="https://github.com/xL1F3" target="_blank" class="btn-icon" title="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+      </a>
     </div>
   </div>
 </header>
 
 <main class="shell">
-  
   <section class="hero">
-    <div class="badge">Source Registry v2.0</div>
-    <h1>Curated Digital Access</h1>
-    <p>Advanced directory for games, media, books, and research. Powered by xL1F3 Software intelligence.</p>
+    <div class="kicker">Source Registry v3.0</div>
+    <!-- Typewriter Title Container -->
+    <h1 class="hero-title" id="dynamicTitle">xL1F3 LINKS<span class="typewriter-caret"></span></h1>
+    <p class="hero-subtitle">Digital sources. Verified links. Zero friction.</p>
+    <div class="credit-tag">ENGINEERED BY <strong>xL1F3 SOFTWARE</strong></div>
     
-    <div class="search-wrapper">
-      <input type="text" class="search-bar" placeholder="Search sources or categories...">
+    <div class="search-container">
+      <span class="search-icon-pos">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </span>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search sources...">
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-val" id="totalSources">0</span>
+        <span class="stat-label">Total Sources</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" style="color:var(--green)">ONLINE</span>
+        <span class="stat-label">Status</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="lastCheck">--:--</span>
+        <span class="stat-label">Last Sync</span>
+      </div>
     </div>
   </section>
 
-  <section class="grid-container">
-
-    <!-- GAMES -->
-    <article class="card cat-games">
-      <div class="card-header">
-        <div class="card-title"><div class="icon-cat"></div> Games</div>
-      </div>
-      <div class="source-list">
-        <a href="https://www.elamigosweb.net/" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">ElAmigos Web</span>
-            <span class="source-meta">Multi | Priority 1</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://www.elamigosgames.net" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">ElAmigos Games</span>
-            <span class="source-meta">Multi | Priority 1</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://steamunlocked.org" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">SteamUnlocked</span>
-            <span class="source-meta">Multi | Direct DL</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://www.gamestorrents.app" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">GameTorrents</span>
-            <span class="source-meta">Multi | Torrent</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://gamesfull.app" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">GamesFull</span>
-            <span class="source-meta">Multi | ISO/Rep</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://repack.info/es/" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">Repack Info</span>
-            <span class="source-meta">Spanish | Repacks</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://gtorr.net" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">GTorr</span>
-            <span class="source-meta">Multi | Torrent</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://fitgirl-repacks.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">FitGirl Repacks</span>
-            <span class="source-meta">Multi | Highly Compressed</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-      </div>
-    </article>
-
-    <!-- TORRENTS -->
-    <article class="card cat-torrents">
-      <div class="card-header">
-        <div class="card-title"><div class="icon-cat"></div> General Torrents</div>
-      </div>
-      <div class="source-list">
-        <a href="https://1337x.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">1337x</span>
-            <span class="source-meta">General Purpose</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://kickasstorrents.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">KickassTorrents</span>
-            <span class="source-meta">Legacy / Mirror</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://thepiratebay.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">The Pirate Bay</span>
-            <span class="source-meta">The Classic</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://limetorrents.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">LimeTorrents</span>
-            <span class="source-meta">Lightweight</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://extratorrent.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">ExtraTorrent</span>
-            <span class="source-meta">Archive / Mirror</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-      </div>
-    </article>
-
-    <!-- VIDEO & STREAMING -->
-    <article class="card cat-video">
-      <div class="card-header">
-        <div class="card-title"><div class="icon-cat"></div> Movies & Video</div>
-      </div>
-      <div class="source-list">
-        <a href="https://yts.unblockninja.st" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">YTS (YIFY)</span>
-            <span class="source-meta">Movies | Small Size</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-      </div>
-    </article>
-
-    <article class="card cat-streaming">
-      <div class="card-header">
-        <div class="card-title"><div class="icon-cat"></div> Streaming</div>
-      </div>
-      <div class="source-list">
-        <a href="https://ccuevana3.tv" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">Cuevana3</span>
-            <span class="source-meta">Spanish | HD</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://fullpelis.pro" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">FullPelis</span>
-            <span class="source-meta">Spanish | Catalog</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://pelisplus247.com" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">PelisPlus247</span>
-            <span class="source-meta">Spanish | 24/7</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://cinehype.sc" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">CineHype</span>
-            <span class="source-meta">Multi | Quality</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-      </div>
-    </article>
-
-    <!-- SPORTS -->
-    <article class="card cat-sports">
-      <div class="card-header">
-        <div class="card-title"><div class="icon-cat"></div> Sports Live</div>
-      </div>
-      <div class="source-list">
-        <a href="https://tarjetaroja.digital" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">Tarjeta Roja</span>
-            <span class="source-meta">Spanish | Live</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://rojadirectatvplus.net" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">RojaDirecta TV+</span>
-            <span class="source-meta">Spanish | Aggregator</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://streameasto.cx" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">StreamEast</span>
-            <span class="source-meta">English | HD</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://elkoragoal.com/goal/" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">ElKoraGoal</span>
-            <span class="source-meta">Arabic | Football</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-      </div>
-    </article>
-
-    <!-- BOOKS -->
-    <article class="card cat-books">
-      <div class="card-header">
-        <div class="card-title"><div class="icon-cat"></div> Books & Archives</div>
-      </div>
-      <div class="source-list">
-        <a href="https://annas-archive.cc" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">Anna's Archive (.cc)</span>
-            <span class="source-meta">Shadow Library</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-        <a href="https://annas-archive.pk" target="_blank" class="source-item">
-          <div class="source-info">
-            <span class="source-name">Anna's Archive (.pk)</span>
-            <span class="source-meta">Mirror / Backup</span>
-          </div>
-          <span class="btn-visit">Visit</span>
-        </a>
-      </div>
-    </article>
-
+  <section class="grid-section" id="gridContainer">
+    <!-- Categories injected via JS -->
   </section>
-
-  <section style="text-align:center; margin-bottom: 60px;">
-    <a href="mailto:xL1F3@proton.me" style="display:inline-flex; align-items:center; gap:10px; padding:12px 24px; background:linear-gradient(90deg, var(--primary), var(--secondary)); color:#000; font-weight:700; border-radius:30px; box-shadow:0 0 20px rgba(0,242,255,0.4);">
-      <span>Contact xL1F3 Software</span>
-      <span>→</span>
-    </a>
-  </section>
-
+  
+  <div class="no-results-msg" id="noResults">NO MATCHES FOUND // TRY ANOTHER QUERY</div>
 </main>
 
 <footer>
   <div class="shell">
-    <p>&copy; 2026 xL1F3 Sites. All rights reserved.</p>
-    <p class="footer-brand">by xL1F3 software</p>
+    <div class="footer-brand">© 2026 <strong>xL1F3 Links</strong> · All Rights Reserved</div>
+    
+    <!-- Contact Button with Arrow -->
+    <a href="mailto:xL1F3@proton.me" class="footer-contact">
+      CONTACT <span class="footer-arrow">→</span> xl1f3@proton.me
+    </a>
+    
+    <div style="margin-top:15px; font-size:10px; color:#444;">Designed & Built by xL1F3 software</div>
   </div>
 </footer>
 
+<!-- Hidden YouTube Player for Music -->
+<div id="yt-player" style="display:none;"></div>
+
+<script>
+// --- DATA CONFIGURATION ---
+const SOURCES_DATA = [
+  {
+    category: "Games",
+    color: "#ff416c",
+    items: [
+      { name: "ElAmigos Web", url: "https://www.elamigosweb.net/", desc: "Multi-language Repacks" },
+      { name: "SteamUnlocked", url: "https://steamunlocked.org", desc: "Direct Download" },
+      { name: "FitGirl Repacks", url: "https://fitgirl-repacks.unblockninja.st", desc: "Highly Compressed" },
+      { name: "GameTorrents", url: "https://www.gamestorrents.app", desc: "Torrent Index" }
+    ]
+  },
+  {
+    category: "Torrents",
+    color: "#ffae42",
+    items: [
+      { name: "1337x", url: "https://1337x.unblockninja.st", desc: "General Purpose" },
+      { name: "The Pirate Bay", url: "https://thepiratebay.unblockninja.st", desc: "Classic Index" },
+      { name: "KickassTorrents", url: "https://kickasstorrents.unblockninja.st", desc: "Legacy Mirror" }
+    ]
+  },
+  {
+    category: "Video/Movies",
+    color: "#00d9ff",
+    items: [
+      { name: "YTS (YIFY)", url: "https://yts.unblockninja.st", desc: "Small Size Movies" }
+    ]
+  },
+  {
+    category: "Streaming",
+    color: "#bd67ff",
+    items: [
+      { name: "Cuevana3", url: "https://ccuevana3.tv", desc: "Spanish HD" },
+      { name: "FullPelis", url: "https://fullpelis.pro", desc: "Catalog" },
+      { name: "CineHype", url: "https://cinehype.sc", desc: "Multi Quality" }
+    ]
+  },
+  {
+    category: "Sports",
+    color: "#00ff9d",
+    items: [
+      { name: "Tarjeta Roja", url: "https://tarjetaroja.digital", desc: "Live Sports ES" },
+      { name: "StreamEast", url: "https://streameasto.cx", desc: "HD English" }
+    ]
+  },
+  {
+    category: "Books/Archives",
+    color: "#ffd84d",
+    items: [
+      { name: "Anna's Archive", url: "https://annas-archive.cc", desc: "Shadow Library" },
+      { name: "Library Genesis", url: "https://libgen.is", desc: "Academic Papers" }
+    ]
+  }
+];
+
+// --- INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+  initBootSequence();
+  renderGrid();
+  setupCursor();
+  setupSearch();
+  startTypewriterEffect();
+});
+
+// --- BOOT SEQUENCE LOGIC ---
+function initBootSequence() {
+  const lines = ['bl1', 'bl2', 'bl3', 'bl4'];
+  const bootScreen = document.getElementById('bootScreen');
+  const accessBtn = document.getElementById('accessBtn');
+  
+  // Show lines sequentially
+  lines.forEach((id, index) => {
+    setTimeout(() => {
+      document.getElementById(id).classList.add('visible');
+    }, index * 400);
+  });
+
+  // Show Access Button after boot lines
+  setTimeout(() => {
+    accessBtn.classList.add('show');
+  }, 2000);
+
+  // Handle Access Click
+  accessBtn.addEventListener('click', () => {
+    bootScreen.classList.add('hidden');
+    // Optional: Start music automatically or wait for user interaction
+    // initYouTubePlayer(); 
+  });
+}
+
+// --- TYPEWRITER EFFECT FOR TITLE ---
+function startTypewriterEffect() {
+  const titleElement = document.getElementById('dynamicTitle');
+  const fullText = "xL1F3 LINKS";
+  let currentText = "";
+  let charIndex = 0;
+  
+  // Clear initial content to ensure typewriter starts fresh
+  titleElement.innerHTML = '<span class="typewriter-caret"></span>';
+  
+  function typeChar() {
+    if (charIndex < fullText.length) {
+      currentText += fullText.charAt(charIndex);
+      titleElement.innerHTML = currentText + '<span class="typewriter-caret"></span>';
+      charIndex++;
+      setTimeout(typeChar, 100); // Speed of typing
+    } else {
+      // Keep caret blinking at end
+      titleElement.innerHTML = fullText + '<span class="typewriter-caret"></span>';
+    }
+  }
+  
+  // Start typing after boot sequence finishes (approx 2.5s)
+  setTimeout(typeChar, 2500);
+}
+
+// --- RENDER GRID ---
+function renderGrid(filter = "") {
+  const container = document.getElementById('gridContainer');
+  container.innerHTML = '';
+  let totalItems = 0;
+  let visibleCards = 0;
+
+  SOURCES_DATA.forEach(cat => {
+    const filteredItems = cat.items.filter(item => 
+      item.name.toLowerCase().includes(filter.toLowerCase()) || 
+      item.desc.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    if (filteredItems.length === 0) return;
+
+    visibleCards++;
+    totalItems += filteredItems.length;
+
+    const card = document.createElement('article');
+    card.className = 'category-card';
+    card.style.setProperty('--cat-color', cat.color);
+    
+    let itemsHtml = '';
+    filteredItems.forEach(item => {
+      itemsHtml += `
+        <div class="source-item" data-url="${item.url}">
+          <div class="source-info">
+            <span class="source-name">${item.name}</span>
+            <span class="source-desc">${item.desc}</span>
+          </div>
+          <div class="source-actions">
+            <span class="status-badge">
+              <span class="dot"></span> ONLINE
+            </span>
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT ↗</a>
+          </div>
+        </div>
+      `;
+    });
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="cat-title-group">
+          <div class="cat-dot" style="background:${cat.color}; box-shadow: 0 0 10px ${cat.color}"></div>
+          <span class="cat-name">${cat.category}</span>
+        </div>
+        <span class="cat-count">${filteredItems.length} SRC</span>
+      </div>
+      <div class="source-list">
+        ${itemsHtml}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  document.getElementById('totalSources').textContent = totalItems;
+  document.getElementById('noResults').classList.toggle('show', visibleCards === 0 && filter !== "");
+}
+
+// --- SEARCH LOGIC ---
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  input.addEventListener('input', (e) => {
+    renderGrid(e.target.value);
+  });
+}
+
+// --- CURSOR EFFECTS ---
+function setupCursor() {
+  const glow = document.getElementById('cursorGlow');
+  const dot = document.getElementById('cursorDot');
+  const root = document.documentElement;
+
+  window.addEventListener('mousemove', (e) => {
+    const x = e.clientX;
+    const y = e.clientY;
+    
+    // Update CSS variables for background gradient
+    root.style.setProperty('--mx', `${x}px`);
+    root.style.setProperty('--my', `${y}px`);
+    
+    // Move elements
+    glow.style.left = `${x}px`;
+    glow.style.top = `${y}px`;
+    dot.style.left = `${x}px`;
+    dot.style.top = `${y}px`;
+  });
+}
+
+// --- YOUTUBE AUDIO PLAYER INTEGRATION ---
+let ytPlayer;
+let isPlaying = false;
+const soundBtn = document.getElementById('soundToggle');
+
+// Load YouTube API asynchronously
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+const firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+function onYouTubeIframeAPIReady() {
+  ytPlayer = new YT.Player('yt-player', {
+    videoId: 'LRo7pPJeg9I', // ID from https://www.youtube.com/watch?v=LRo7pPJeg9I
+    playerVars: {
+      'autoplay': 0,
+      'controls': 0,
+      'loop': 1,
+      'playlist': 'LRo7pPJeg9I'
+    },
+    events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  // Player is ready, but we don't autoplay due to browser policies
+  console.log("YT Player Ready");
+}
+
+function onPlayerStateChange(event) {
+  if (event.data == YT.PlayerState.PLAYING) {
+    isPlaying = true;
+    updateSoundButton(true);
+  } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+    isPlaying = false;
+    updateSoundButton(false);
+  }
+}
+
+function toggleMusic() {
+  if (!ytPlayer || !ytPlayer.playVideo) return;
+  
+  if (isPlaying) {
+    ytPlayer.pauseVideo();
+  } else {
+    ytPlayer.playVideo();
+  }
+}
+
+function updateSoundButton(active) {
+  if (active) {
+    soundBtn.classList.add('active');
+    soundBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+  } else {
+    soundBtn.classList.remove('active');
+    soundBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
+  }
+}
+
+soundBtn.addEventListener('click', toggleMusic);
+
+</script>
 </body>
 </html>
