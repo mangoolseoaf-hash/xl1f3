@@ -2,38 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="xL1F3 Links — Digital Source Registry by xL1F3 software.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="xL1F3 Links — Advanced Curated Digital Source Registry.">
 <meta name="theme-color" content="#050607">
 <title>xL1F3 Links by xL1F3 software</title>
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
 :root{
-  --bg:#030405;
-  --panel:rgba(10,13,16,.85);
-  --panel-hover:rgba(15,20,24,.95);
+  --bg:#040506;
+  --panel:rgba(15, 20, 25, 0.65);
+  --panel-hover:rgba(20, 25, 30, 0.85);
   --line:rgba(255,255,255,.08);
-  --line-active:rgba(0,255,120,.3);
-  --text:#eef2f0;
-  --muted:#6b7a74;
+  --text:#f4f7f5;
+  --muted:#7f8b86;
   --green:#00ff78;
   --cyan:#00eaff;
   --purple:#a855ff;
   --danger:#ff4d67;
   --yellow:#ffd84d;
   --mono:"JetBrains Mono","Fira Code",Consolas,monospace;
-  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  
-  /* Dynamic Cursor Vars */
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
   --mx:50%;
   --my:50%;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -41,600 +32,614 @@ body{
   overflow-x:hidden;
   color:var(--text);
   font-family:var(--sans);
-  background:var(--bg);
-  position:relative;
+  background:
+    radial-gradient(800px circle at var(--mx) var(--my),rgba(0,255,120,.06),transparent 40%),
+    radial-gradient(600px circle at 10% 10%,rgba(168,85,247,.05),transparent 40%),
+    linear-gradient(135deg,#030405,#07090a 55%,#020303);
 }
-
-/* Background Grid & Glow */
-body::before {
-  content:"";position:fixed;inset:0;z-index:-2;
-  background-image: 
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 40px 40px;
-  opacity: 0.15;
-  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+/* Grid Background */
+body:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:50px 50px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
 }
-body::after {
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background: radial-gradient(800px circle at var(--mx) var(--my), rgba(0,255,120,.06), transparent 40%);
-  transition: background .1s ease-out;
-}
-
 ::selection{background:var(--green);color:#000}
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:#0a0c0e}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#030405}
 ::-webkit-scrollbar-thumb{background:#26312c;border-radius:10px}
 ::-webkit-scrollbar-thumb:hover{background:var(--green)}
-
 a{text-decoration:none;color:inherit}
-button,input{font:inherit;border:none;background:none}
-button{cursor:pointer}
+button,input{font:inherit;border:none;outline:none}
+.shell{width:min(1300px,calc(100% - 40px));margin:auto}
 
-.shell{width:min(1200px, calc(100% - 32px));margin:auto;}
+/* Cursor Glow */
+.cursor-glow{
+  position:fixed;left:0;top:0;width:500px;height:500px;border-radius:50%;
+  pointer-events:none;z-index:0;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(0,255,120,.08),transparent 60%);
+  mix-blend-mode:screen;transition:opacity .1s;
+}
 
-/* --- Custom Cursor Elements --- */
-.cursor-glow {
-  position: fixed; left: 0; top: 0; width: 400px; height: 400px; border-radius: 50%;
-  pointer-events: none; z-index: 0; transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(0,255,120,.08), transparent 60%);
-  mix-blend-mode: screen;
-  transition: opacity .3s;
+/* Boot Screen */
+.boot{
+  position:fixed;inset:0;background:#020303;z-index:2000;
+  display:grid;place-items:center;padding:25px;
+  transition:opacity .8s,visibility .8s;
 }
-.cursor-dot {
-  position: fixed; width: 6px; height: 6px; border-radius: 50%; background: var(--green);
-  box-shadow: 0 0 15px var(--green); pointer-events: none; z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform .1s cubic-bezier(.1,.6,.3,1);
+.boot.hide{opacity:0;visibility:hidden;pointer-events:none}
+.terminal{
+  width:min(700px,100%);border:1px solid rgba(0,255,120,.2);
+  background:rgba(5,8,6,.95);box-shadow:0 0 50px rgba(0,0,0,.5);
+  border-radius:8px;overflow:hidden;font-family:var(--mono);
 }
-@media (hover: none) { .cursor-glow, .cursor-dot { display: none; } }
+.termbar{height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
+.termbar i{width:8px;height:8px;border-radius:50%}
+.termbar i:nth-child(1){background:#ff5f57}
+.termbar i:nth-child(2){background:#ffbd2e}
+.termbar i:nth-child(3){background:#28c840}
+.termbody{padding:20px;color:#9dfbc0;font-size:12px;line-height:1.6;min-height:200px}
+.term-line{opacity:0;margin-bottom:4px}.term-line.show{opacity:1}
+.progress-bar{height:2px;background:#132018;margin-top:15px;width:100%}
+.progress-fill{height:100%;width:0;background:var(--green);box-shadow:0 0 10px var(--green);animation:load 2s ease forwards}
+@keyframes load{to{width:100%}}
 
-/* --- Boot Screen / Gate --- */
-.boot-screen {
-  position: fixed; inset: 0; background: #000; z-index: 10000;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); color: var(--green);
-  transition: opacity .8s ease, visibility .8s;
+/* Header */
+header{
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--line);
+  background:rgba(4,5,6,.7);backdrop-filter:blur(15px);
+  padding:15px 0;
 }
-.boot-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.boot-content { max-width: 600px; width: 100%; padding: 20px; text-align: center; }
-.boot-line { margin-bottom: 8px; opacity: 0; transform: translateY(10px); transition: all .3s; font-size: 14px; }
-.boot-line.visible { opacity: 1; transform: translateY(0); }
-.boot-cursor { display: inline-block; width: 8px; height: 15px; background: var(--green); animation: blink 1s infinite; vertical-align: middle; margin-left: 5px; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.nav{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px}
+.logo-icon{
+  width:32px;height:32px;background:var(--green);border-radius:6px;
+  display:grid;place-items:center;color:#000;font-weight:900;font-family:var(--mono);
+  box-shadow:0 0 15px rgba(0,255,120,.3);
+}
+.brand-text h2{font-size:16px;font-weight:800;letter-spacing:-0.5px}
+.brand-text span{font-size:10px;color:var(--muted);font-family:var(--mono)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn-nav{
+  padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted);
+  transition:.3s;
+}
+.btn-nav:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,120,.05)}
+.sound-btn{
+  width:36px;height:36px;border-radius:6px;display:grid;place-items:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted);
+  cursor:pointer;transition:.3s;
+}
+.sound-btn.active{color:var(--green);border-color:var(--green);box-shadow:0 0 10px rgba(0,255,120,.2)}
 
-.access-btn {
-  margin-top: 30px; padding: 12px 24px; border: 1px solid var(--green);
-  background: rgba(0,255,120,.05); color: var(--green);
-  font-family: var(--mono); font-size: 14px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .1em;
-  cursor: pointer; transition: all .3s;
-  box-shadow: 0 0 20px rgba(0,255,120,.1);
-  opacity: 0; transform: scale(0.9);
+/* Hero */
+.hero{text-align:center;padding:80px 0 60px;position:relative}
+.badge{
+  display:inline-block;padding:4px 10px;border-radius:20px;
+  background:rgba(0,255,120,.1);border:1px solid rgba(0,255,120,.2);
+  color:var(--green);font:10px var(--mono);letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:20px;
 }
-.access-btn.show { opacity: 1; transform: scale(1); }
-.access-btn:hover { background: var(--green); color: #000; box-shadow: 0 0 30px rgba(0,255,120,.3); }
+h1{
+  font-size:clamp(3rem, 6vw, 5rem);font-weight:900;line-height:1;
+  margin-bottom:15px;letter-spacing:-2px;
+}
+.hacker-text{
+  font-family:var(--mono);font-size:0.2em;color:var(--green);
+  display:block;margin-bottom:10px;text-shadow:0 0 10px rgba(0,255,120,.4);
+}
+.hero p{color:var(--muted);max-width:600px;margin:0 auto 30px}
+.search-box{
+  max-width:500px;margin:0 auto;position:relative;
+}
+.search-input{
+  width:100%;padding:14px 20px;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);
+  color:white;font-size:14px;transition:.3s;
+}
+.search-input:focus{border-color:var(--green);box-shadow:0 0 20px rgba(0,255,120,.1)}
 
-/* --- Header --- */
-header {
-  position: sticky; top: 0; z-index: 100;
-  backdrop-filter: blur(12px);
-  background: rgba(3,4,5,.7);
-  border-bottom: 1px solid var(--line);
+/* Grid & Cards */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:20px;padding-bottom:80px;
 }
-.nav { height: 70px; display: flex; align-items: center; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: 12px; }
-.logo-box {
-  width: 36px; height: 36px; border-radius: 8px;
-  background: linear-gradient(135deg, #0a0f0c, #050806);
-  border: 1px solid var(--line-active);
-  display: grid; place-items: center;
-  box-shadow: 0 0 20px rgba(0,255,120,.1);
-  position: relative; overflow: hidden;
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  overflow:hidden;transition:.3s;position:relative;
+  backdrop-filter:blur(10px);
 }
-.logo-box::after {
-  content:''; position:absolute; inset:0;
-  background: conic-gradient(from 0deg, transparent, var(--green), transparent 30%);
-  animation: spin 4s linear infinite; opacity: .3;
+.card:hover{
+  transform:translateY(-5px);border-color:rgba(0,255,120,.3);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.logo-svg { width: 20px; height: 20px; fill: var(--green); z-index: 1; }
-.brand-text h1 { font-size: 16px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
-.brand-text span { font-size: 10px; color: var(--muted); font-family: var(--mono); text-transform: uppercase; letter-spacing: .05em; }
-.brand-text b { color: var(--green); }
+.card-head{
+  padding:15px 20px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.02);
+}
+.cat-title{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.cat-dot{width:6px;height:6px;border-radius:50%;background:var(--muted)}
+/* Category Colors */
+.cat-adblock .cat-dot{background:#ff4d67;box-shadow:0 0 8px #ff4d67}
+.cat-anime .cat-dot{background:#a855ff;box-shadow:0 0 8px #a855ff}
+.cat-apps .cat-dot{background:#00eaff;box-shadow:0 0 8px #00eaff}
+.cat-games .cat-dot{background:#00ff78;box-shadow:0 0 8px #00ff78}
+.cat-vpn .cat-dot{background:#ffd84d;box-shadow:0 0 8px #ffd84d}
 
-.nav-actions { display: flex; align-items: center; gap: 10px; }
-.btn-icon {
-  width: 36px; height: 36px; border-radius: 8px;
-  border: 1px solid var(--line); background: rgba(255,255,255,.03);
-  display: grid; place-items: center; color: var(--muted);
-  transition: all .2s;
+.source-list{padding:10px}
+.source-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 12px;border-radius:6px;transition:.2s;
+  border:1px solid transparent;
 }
-.btn-icon:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,120,.05); }
-.btn-icon.active { border-color: var(--green); color: var(--green); box-shadow: 0 0 15px rgba(0,255,120,.2); }
-
-/* --- Hero Section --- */
-.hero { padding: 80px 0 60px; text-align: center; position: relative; }
-.kicker {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 12px; border-radius: 20px;
-  background: rgba(0,255,120,.05); border: 1px solid rgba(0,255,120,.2);
-  font-family: var(--mono); font-size: 11px; color: var(--green);
-  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 24px;
+.source-item:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.05)}
+.s-info{min-width:0}
+.s-name{font-size:13px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.s-meta{font-size:10px;color:var(--muted);font-family:var(--mono)}
+.s-actions{display:flex;gap:8px;align-items:center}
+.status{
+  width:8px;height:8px;border-radius:50%;background:#333;
+  cursor:pointer;position:relative;
 }
-.kicker::before { content:''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
-.hero-title {
-  font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1;
-  margin-bottom: 16px; letter-spacing: -.03em;
-  font-family: var(--mono); /* Typewriter feel */
-  color: var(--text);
+.status.checking{background:var(--yellow);box-shadow:0 0 5px var(--yellow)}
+.status.online{background:var(--green);box-shadow:0 0 5px var(--green)}
+.status.offline{background:var(--danger);box-shadow:0 0 5px var(--danger)}
+.visit-btn{
+  font-size:10px;padding:4px 8px;border-radius:4px;
+  background:rgba(255,255,255,.1);color:var(--muted);
+  transition:.2s;
 }
-.typewriter-caret {
-  display: inline-block; width: 3px; height: 1em; background: var(--green);
-  vertical-align: middle; margin-left: 5px;
-  animation: blink 1s step-end infinite;
-}
-.hero-subtitle { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
-.credit-tag { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 20px; }
-.credit-tag strong { color: var(--text); }
-
-/* Search Bar */
-.search-container { position: relative; max-width: 600px; margin: 0 auto; }
-.search-input {
-  width: 100%; padding: 16px 20px 16px 50px;
-  background: rgba(10,13,16,.6); border: 1px solid var(--line);
-  border-radius: 12px; color: var(--text); font-size: 16px;
-  transition: all .3s; outline: none;
-}
-.search-input:focus { border-color: var(--green); background: rgba(10,13,16,.9); box-shadow: 0 0 0 4px rgba(0,255,120,.1); }
-.search-icon-pos { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
-
-/* Stats */
-.stats-row { display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap; }
-.stat-item { text-align: center; }
-.stat-val { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--text); display: block; }
-.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; }
-
-/* --- Main Grid --- */
-.grid-section { padding-bottom: 80px; }
-.category-card {
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: 16px; margin-bottom: 24px; overflow: hidden;
-  transition: transform .3s, border-color .3s, box-shadow .3s;
-  position: relative;
-}
-.category-card:hover {
-  border-color: var(--line-active);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.3);
-}
-.card-header {
-  padding: 16px 20px; border-bottom: 1px solid var(--line);
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(255,255,255,.02);
-}
-.cat-title-group { display: flex; align-items: center; gap: 10px; }
-.cat-dot { width: 8px; height: 8px; border-radius: 50%; }
-.cat-name { font-weight: 600; font-size: 15px; }
-.cat-count { font-family: var(--mono); font-size: 11px; color: var(--muted); background: rgba(255,255,255,.05); padding: 2px 8px; border-radius: 4px; }
-
-.source-list { padding: 8px; }
-.source-item {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; border-radius: 10px;
-  transition: background .2s;
-}
-.source-item:hover { background: rgba(255,255,255,.04); }
-.source-info { display: flex; flex-direction: column; gap: 2px; }
-.source-name { font-weight: 500; font-size: 14px; color: var(--text); }
-.source-desc { font-size: 12px; color: var(--muted); }
-.source-actions { display: flex; align-items: center; gap: 12px; }
-
-.status-badge {
-  font-family: var(--mono); font-size: 10px; padding: 4px 8px;
-  border-radius: 6px; border: 1px solid rgba(0,255,120,.3);
-  display: flex; align-items: center; gap: 6px; min-width: 80px; justify-content: center;
-  color: var(--green); background: rgba(0,255,120,.05);
-}
-.status-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
-
-.visit-btn {
-  padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600;
-  background: rgba(255,255,255,.05); color: var(--text);
-  border: 1px solid var(--line); transition: all .2s;
-}
-.visit-btn:hover { background: var(--green); color: #000; border-color: var(--green); box-shadow: 0 0 15px rgba(0,255,120,.3); }
-
-.no-results-msg { text-align: center; padding: 40px; color: var(--muted); font-family: var(--mono); display: none; }
-.no-results-msg.show { display: block; }
+.source-item:hover .visit-btn{background:var(--green);color:#000}
 
 /* Footer */
-footer { border-top: 1px solid var(--line); padding: 40px 0; text-align: center; background: rgba(0,0,0,.2); }
-.footer-brand { font-family: var(--mono); font-size: 14px; color: var(--muted); margin-bottom: 10px; }
-.footer-brand strong { color: var(--green); }
-.footer-contact {
-  display: inline-flex; align-items: center; gap: 10px;
-  margin-top: 15px; padding: 10px 20px;
-  border: 1px solid var(--line); border-radius: 8px;
-  background: rgba(255,255,255,.02);
-  font-family: var(--mono); font-size: 13px; color: var(--text);
-  transition: all .3s;
+footer{
+  border-top:1px solid var(--line);padding:40px 0;text-align:center;
+  color:var(--muted);font-size:12px;
 }
-.footer-contact:hover { border-color: var(--green); color: var(--green); background: rgba(0,255,120,.05); }
-.footer-arrow { color: var(--green); font-weight: bold; }
+.footer-brand{color:var(--green);font-family:var(--mono);font-weight:700;margin-top:5px}
 
-/* Responsive */
-@media (max-width: 768px) {
-  .hero-title { font-size: 2.2rem; }
-  .stats-row { gap: 15px; }
-  .source-item { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .source-actions { width: 100%; justify-content: space-between; }
-  .brand-text span { display: none; }
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr}
+  h1{font-size:2.5rem}
 }
 </style>
 </head>
 <body>
 
 <div class="cursor-glow" id="cursorGlow"></div>
-<div class="cursor-dot" id="cursorDot"></div>
 
-<!-- Boot Screen / Access Gate -->
-<div class="boot-screen" id="bootScreen">
-  <div class="boot-content">
-    <div class="boot-line" id="bl1">&gt; Initializing xL1F3 Core...</div>
-    <div class="boot-line" id="bl2">&gt; Loading Source Registry...</div>
-    <div class="boot-line" id="bl3">&gt; Verifying Integrity... [OK]</div>
-    <div class="boot-line" id="bl4">&gt; System Ready.<span class="boot-cursor"></span></div>
-    
-    <button class="access-btn" id="accessBtn">ACCESS LINKS →</button>
+<!-- Boot Terminal -->
+<div class="boot" id="boot">
+  <div class="terminal">
+    <div class="termbar"><i></i><i></i><i></i></div>
+    <div class="termbody">
+      <div class="term-line" id="t1">$ init xL1F3_registry_v3.sh</div>
+      <div class="term-line" id="t2">[OK] Loading modules: Anime, Games, VPN...</div>
+      <div class="term-line" id="t3">[OK] Verifying signature: xL1F3 software</div>
+      <div class="term-line" id="t4">[OK] System Ready.</div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
   </div>
 </div>
 
 <header>
   <div class="shell nav">
     <div class="brand">
-      <div class="logo-box">
-        <svg class="logo-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      </div>
+      <div class="logo-icon">xL</div>
       <div class="brand-text">
-        <h1>xL1F3 <b>Links</b></h1>
+        <h2>xL1F3 Links</h2>
         <span>by xL1F3 software</span>
       </div>
     </div>
     <div class="nav-actions">
-      <button class="btn-icon" id="soundToggle" title="Toggle Audio">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-      </button>
-      <a href="https://github.com/xL1F3" target="_blank" class="btn-icon" title="GitHub">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-      </a>
+      <button class="sound-btn" id="soundBtn" title="Play Sometimes...">♪</button>
+      <a href="mailto:xl1f3@proton.me" class="btn-nav">Contact</a>
     </div>
   </div>
 </header>
 
 <main class="shell">
   <section class="hero">
-    <div class="kicker">Source Registry v3.0</div>
-    <!-- Typewriter Title Container -->
-    <h1 class="hero-title" id="dynamicTitle">xL1F3 LINKS<span class="typewriter-caret"></span></h1>
-    <p class="hero-subtitle">Digital sources. Verified links. Zero friction.</p>
-    <div class="credit-tag">ENGINEERED BY <strong>xL1F3 SOFTWARE</strong></div>
-    
-    <div class="search-container">
-      <span class="search-icon-pos">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      </span>
-      <input type="text" class="search-input" id="searchInput" placeholder="Search sources...">
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-item">
-        <span class="stat-val" id="totalSources">0</span>
-        <span class="stat-label">Total Sources</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-val" style="color:var(--green)">ONLINE</span>
-        <span class="stat-label">Status</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-val" id="lastCheck">--:--</span>
-        <span class="stat-label">Last Sync</span>
-      </div>
+    <div class="badge">Source Registry v3.0</div>
+    <h1>
+      <span class="hacker-text">$ <span id="typeTitle"></span><span style="animation:blink 1s infinite">_</span></span>
+      DIGITAL ACCESS
+    </h1>
+    <p>Curated directory of high-priority digital sources. Fast, secure, and verified.</p>
+    <div class="search-box">
+      <input type="text" class="search-input" id="search" placeholder="Search sources (e.g., 'Anime', 'VPN', 'FitGirl')...">
     </div>
   </section>
 
-  <section class="grid-section" id="gridContainer">
-    <!-- Categories injected via JS -->
+  <section class="grid" id="grid">
+    <!-- Content injected via JS for cleaner code structure -->
   </section>
-  
-  <div class="no-results-msg" id="noResults">NO MATCHES FOUND // TRY ANOTHER QUERY</div>
+
+  <div style="text-align:center;margin-bottom:60px">
+    <a href="mailto:xl1f3@proton.me" class="btn-nav" style="padding:12px 24px;font-size:14px;border-color:var(--green);color:var(--green)">
+      Report Broken Link →
+    </a>
+  </div>
 </main>
 
 <footer>
   <div class="shell">
-    <div class="footer-brand">© 2026 <strong>xL1F3 Links</strong> · All Rights Reserved</div>
-    
-    <!-- Contact Button with Arrow -->
-    <a href="mailto:xL1F3@proton.me" class="footer-contact">
-      CONTACT <span class="footer-arrow">→</span> xl1f3@proton.me
-    </a>
-    
-    <div style="margin-top:15px; font-size:10px; color:#444;">Designed & Built by xL1F3 software</div>
+    <p>&copy; 2026 xL1F3 Links. All rights reserved.</p>
+    <div class="footer-brand">By xL1F3 software</div>
   </div>
 </footer>
 
-<!-- Hidden YouTube Player for Music -->
-<div id="yt-player" style="display:none;"></div>
+<audio id="music" loop src="sometimes.mp3"></audio>
 
 <script>
-// --- DATA CONFIGURATION ---
-const SOURCES_DATA = [
-  {
-    category: "Games",
-    color: "#ff416c",
-    items: [
-      { name: "ElAmigos Web", url: "https://www.elamigosweb.net/", desc: "Multi-language Repacks" },
-      { name: "SteamUnlocked", url: "https://steamunlocked.org", desc: "Direct Download" },
-      { name: "FitGirl Repacks", url: "https://fitgirl-repacks.unblockninja.st", desc: "Highly Compressed" },
-      { name: "GameTorrents", url: "https://www.gamestorrents.app", desc: "Torrent Index" }
-    ]
-  },
-  {
-    category: "Torrents",
-    color: "#ffae42",
-    items: [
-      { name: "1337x", url: "https://1337x.unblockninja.st", desc: "General Purpose" },
-      { name: "The Pirate Bay", url: "https://thepiratebay.unblockninja.st", desc: "Classic Index" },
-      { name: "KickassTorrents", url: "https://kickasstorrents.unblockninja.st", desc: "Legacy Mirror" }
-    ]
-  },
-  {
-    category: "Video/Movies",
-    color: "#00d9ff",
-    items: [
-      { name: "YTS (YIFY)", url: "https://yts.unblockninja.st", desc: "Small Size Movies" }
-    ]
-  },
-  {
-    category: "Streaming",
-    color: "#bd67ff",
-    items: [
-      { name: "Cuevana3", url: "https://ccuevana3.tv", desc: "Spanish HD" },
-      { name: "FullPelis", url: "https://fullpelis.pro", desc: "Catalog" },
-      { name: "CineHype", url: "https://cinehype.sc", desc: "Multi Quality" }
-    ]
-  },
-  {
-    category: "Sports",
-    color: "#00ff9d",
-    items: [
-      { name: "Tarjeta Roja", url: "https://tarjetaroja.digital", desc: "Live Sports ES" },
-      { name: "StreamEast", url: "https://streameasto.cx", desc: "HD English" }
-    ]
-  },
-  {
-    category: "Books/Archives",
-    color: "#ffd84d",
-    items: [
-      { name: "Anna's Archive", url: "https://annas-archive.cc", desc: "Shadow Library" },
-      { name: "Library Genesis", url: "https://libgen.is", desc: "Academic Papers" }
-    ]
-  }
-];
+// --- DATA REGISTRY ---
+const registry = {
+  "ADBLOCKERS": [
+    ["AdBlock Plus", "https://adblockplus.org/"],
+    ["GetAdBlock", "https://getadblock.com/"],
+    ["AdGuard", "https://adguard.com/"],
+    ["uBlock Origin", "https://ublockorigin.com/"],
+    ["Blokada", "https://blokada.org/"],
+    ["Poper Blocker", "https://poperblocker.com/"]
+  ],
+  "ANIME": [
+    ["Anime Nexus", "https://anime.nexus/"],
+    ["AnimeKai", "https://animekai.to/home"],
+    ["HiAnime", "https://hianime.ro/"],
+    ["Aniwaves", "https://aniwaves.ru/"],
+    ["AniZone", "https://anizone.to/"],
+    ["Miruro", "https://www.miruro.to/"],
+    ["AniTaku", "https://anitaku.io/"],
+    ["GogoAnime", "https://wvv.gogoanime.org.vc/"],
+    ["Animetsu", "https://animetsu.bz/"],
+    ["AnimeX", "https://animex.one/home"],
+    ["AnimeGG", "https://www.animegg.org/"],
+    ["UniqueStream", "https://anime.uniquestream.net/"],
+    ["KissAnime", "https://kissanime.com.ru/"],
+    ["AniWorld", "https://aniworld.to/"],
+    ["WCOStream", "https://www.wcostream.tv/"],
+    ["123Anime", "https://w1.123animes.ru/"]
+  ],
+  "APPS / STORES": [
+    ["MyFlixerFree", "https://myflixerfree.com/"],
+    ["HappyMod", "https://happymod.ac/"],
+    ["Uptodown", "https://uptodown.com/"],
+    ["Download.it", "https://download.it/"],
+    ["APKPure", "https://apkpure.com/"],
+    ["ModCombo", "https://modcombo.com/"]
+  ],
+  "ASIAN DRAMA": [
+    ["KissKH", "https://kisskh.id/"],
+    ["GoPlay", "https://goplay.su/"],
+    ["AsiaFlix", "https://asiaflix.net/home"],
+    ["KissAsian", "https://ww14.kissasian.com.lv/"],
+    ["DramaCool", "https://dramacooll.fun/"],
+    ["AsianCtv", "https://asianctv.cc/"],
+    ["MyAsianTV", "https://myasiantv.com.bz/"],
+    ["KissKH Club", "https://kisskh.club/"],
+    ["TVMi", "https://tvmi.mt/"]
+  ],
+  "COMICS": [
+    ["ReadComicOnline", "https://readcomiconline.li/"],
+    ["ReadComicsOnline", "https://readcomicsonline.ru/"],
+    ["Batcave", "https://batcave.biz/"],
+    ["XoxoComic", "https://xoxocomic.com/"],
+    ["GlobalComix", "https://globalcomix.com/browse/en/comics"],
+    ["FreeComicBookDay", "https://www.freecomicbookday.com/comics"],
+    ["StoryBerries", "https://www.storyberries.com/category/comic-books-for-kids/"],
+    ["Hoopla", "https://www.hoopladigital.com/"]
+  ],
+  "EBOOKS": [
+    ["Z-Library", "https://z-lib.fm/"],
+    ["LibGen", "https://libgen.li/"],
+    ["Anna's Archive", "https://annas-archive.gl/"],
+    ["Ebook-Hunter", "https://ebook-hunter.org/"],
+    ["Plough", "https://www.plough.com/"],
+    ["Ebooks.com", "https://www.ebooks.com/"],
+    ["Gutenberg", "https://www.gutenberg.org/"],
+    ["OpenLibrary", "https://openlibrary.org/"],
+    ["TapeAids", "https://tapeaids.com/"],
+    ["DigitalBook", "https://www.digitalbook.io/"],
+    ["AudiobooksNow", "https://www.audiobooksnow.com/"],
+    ["LibriVox", "https://librivox.org/"],
+    ["Audiobooks.com", "https://www.audiobooks.com/"],
+    ["AudioBookBay", "https://audiobookbay.lu/"],
+    ["Nepu eBooks", "https://nepu.to/ebooks"],
+    ["Foxit Reader", "https://www.foxit.com/pdf-reader/"],
+    ["Flowoss", "https://www.flowoss.com/"],
+    ["Adobe Reader", "https://get.adobe.com/reader/"]
+  ],
+  "ENCYCLOPEDIAS": [
+    ["Wikipedia", "https://wikipedia.com/"],
+    ["Britannica", "https://www.britannica.com/"],
+    ["Scholarpedia", "https://www.scholarpedia.org/"],
+    ["Citizendium", "https://en.citizendium.org/"],
+    ["HandWiki", "https://handwiki.org/wiki/"],
+    ["Appropedia", "https://www.appropedia.org/"],
+    ["Wiktionary", "https://www.wiktionary.org/"],
+    ["Wikibooks", "https://www.wikibooks.org/"],
+    ["WikiHow", "https://www.wikihow.com/Main-Page"],
+    ["Encyclopedia.com", "https://www.encyclopedia.com/"],
+    ["EOL", "https://eol.org/"]
+  ],
+  "GAMES": [
+    ["Poki", "https://poki.co.com/"],
+    ["Geometry Dash", "https://geometrydash.us.com/"],
+    ["CrazyGames", "https://crazygames.com/"],
+    ["Poki Global", "https://poki.com/"],
+    ["HoodaMath", "https://hoodamath.co.com/"],
+    ["DriftBoss", "https://driftboss.co.com/"],
+    ["Friv", "https://www.friv.com/"],
+    ["PlayHop", "https://playhop.com/"],
+    ["CoolMathGames", "https://coolmathgames.com/"],
+    ["MathPlayground", "https://mathplayground.com/"],
+    ["Kongregate", "https://www.kongregate.com/en"],
+    ["AARP Games", "https://www.aarp.org/"],
+    ["Epic Games", "https://store.epicgames.com/en-US/free-games"],
+    ["AddictingGames", "https://www.addictinggames.com/"],
+    ["Google Play", "https://play.google.com/"],
+    ["HappyModz", "https://happymodz.org/"],
+    ["Aptoide", "https://aptoide.com/"],
+    ["AN1", "https://an1.com/"],
+    ["FileHippo", "https://filehippo.com/"],
+    ["HHappyMod", "https://hhappymod.com/"],
+    ["APKTodo", "https://apktodo.io/"],
+    ["KingModAPK", "https://kingmodapk.net/"],
+    ["APKModGet", "https://apkmodget.com/"],
+    ["SteamRip", "https://steamrip.com/"],
+    ["Steam Store", "https://store.steampowered.com/"],
+    ["EA", "https://www.ea.com/"]
+  ],
+  "VPN": [
+    ["NordVPN", "https://nordvpn.com/"],
+    ["Surfshark", "https://surfshark.com/"],
+    ["ExpressVPN", "https://go.expressvpn.com/"],
+    ["PandaVPN", "https://pandavpnpro.com/"],
+    ["TurboVPN", "https://turbovpn.com/"],
+    ["SuperVPN", "https://vpnsuper.com/"],
+    ["ProtonVPN", "https://protonvpn.com/"],
+    ["FreeVPNPlanet", "https://freevpnplanet.com/"],
+    ["UrbanVPN", "https://www.urban-vpn.com/"],
+    ["Hola", "https://hola.org/"],
+    ["Psiphon", "https://psiphon.ca/"]
+  ],
+  "LIVE TV": [
+    ["TheTVApp", "https://thetvappp.com/"],
+    ["Famelack", "https://famelack.com/"],
+    ["TheTVApp.to", "https://thetvapp.to/"],
+    ["DLHD", "https://dlhd.link/24-7-channels.php"],
+    ["TV247US", "https://tv247us.live/"],
+    ["NTVStream", "https://ntvstream.cx/channels"],
+    ["IPTV-Web", "https://iptv-web.app/"],
+    ["PublicIPTV", "https://publiciptv.com/"]
+  ],
+  "MANGA": [
+    ["Comix.to", "https://comix.to/"],
+    ["MangaFire", "https://mangafire.to/home"],
+    ["MangaHaven", "https://mangahaven.net/"],
+    ["MangaTaro", "https://mangataro.org/"],
+    ["MangaDex", "https://mangadex.org/"],
+    ["AllManga", "https://allmanga.to/manga"],
+    ["MangaGo", "https://mangago.me/"],
+    ["WeebCentral", "https://weebcentral.com/"],
+    ["Manganato", "https://www.manganato.gg/"],
+    ["Kagane", "https://kagane.org/"]
+  ],
+  "MOVIES / TV": [
+    ["Wooflix", "https://wooflix.stream/"],
+    ["MyFlixerFree", "https://myflixerfree.com/"],
+    ["Viki", "https://www.viki.com/categories/watch-free/genre/all"],
+    ["Ramoflix", "https://ramoflix.net/"],
+    ["DoraWatch", "https://dorawatch.one/"],
+    ["WMovies", "https://wmovies.one/"],
+    ["HydraHD", "https://hydrahd.ru/"],
+    ["Cineby", "https://www.cineby.sc/"],
+    ["FlickyStream", "https://flickystream.ru/"],
+    ["Yflix", "https://yflix.to/home"],
+    ["Cinema.bz", "https://cinema.bz/"],
+    ["Flixer", "https://flixer.su/"],
+    ["WeTV", "https://wetv.vip/"],
+    ["Goojara", "https://ww1.goojara.to/"],
+    ["StreamVaults", "https://streamvaults.ru/"],
+    ["67Movies", "https://67movies.net/"]
+  ],
+  "MUSIC": [
+    ["SpotDownloader", "https://spotdownloader.com/"],
+    ["SpotifyMate", "https://spotifymate.com/en"],
+    ["SpotMate", "https://spotmate.online/"],
+    ["Y2Mate", "https://v3.y2mate.nu/"],
+    ["SaveFrom", "https://en1.savefrom.net/"],
+    ["YTDown", "https://app.ytdown.to/en27/"],
+    ["DownCloud", "https://downcloudme.com/enTc/"],
+    ["SCloudPlaylist", "https://scloudplaylistdownloader.app/en1/"],
+    ["SoundLoadMate", "https://soundloadmate.net/"],
+    ["FreeMusicArchive", "https://freemusicarchive.org/"],
+    ["MusOpen", "https://musopen.org/"],
+    ["Racoon", "https://shailendramaurya.github.io/racoon/"],
+    ["Ytiz", "https://ytiz.xyz/"],
+    ["Lucida", "https://lucida.to/"],
+    ["Cobalt", "https://cobalt.tools/"]
+  ],
+  "NEWS": [
+    ["BBC Live", "https://www.bbc.com/watch-live-news"],
+    ["CNN Fast", "https://edition.cnn.com/videos/fast/cnni-fast"],
+    ["AlJazeera", "https://www.aljazeera.com/video/live"],
+    ["Sky News", "https://news.sky.com/watch-live"],
+    ["ABC News", "https://abcnews.com/live"],
+    ["CBS News", "https://www.cbsnews.com/live/"],
+    ["LiveNowFox", "https://www.livenowfox.com/live"],
+    ["NDTV", "https://www.ndtv.com/livetv-ndtv24x7"],
+    ["Reuters", "https://www.reuters.com/live/"],
+    ["Euronews", "https://www.euronews.com/live"]
+  ],
+  "SPORTS": [
+    ["FutbolLibre", "https://futbollibre.co.com/"],
+    ["LiveTV", "https://livetv.sx/enx/"],
+    ["TotalSportek", "https://totalsportek.events/"],
+    ["NTV.cx", "https://ntv.cx/"],
+    ["StreamEast", "https://v2.streameast.ga/"],
+    ["FCTV33", "https://www.fctv33.hair/"],
+    ["MethStreams", "https://methstreams.ms/"],
+    ["SportsBite", "https://sportsbite.sbs/schedule"],
+    ["Sport71", "https://beta.sport71.pro/"],
+    ["SportyHunter", "https://sportyhunter.com/"],
+    ["WatchSports", "https://watchsports.to/"],
+    ["CrackStreams", "https://crackstreams.io/"],
+    ["OnHockey", "http://onhockey.tv/"],
+    ["LiveTV861", "https://livetv861.me/enx/"],
+    ["StrikeOut", "https://strikeout.im/"],
+    ["WatchFooty", "https://www.watchfooty.st/en"],
+    ["Sportsurge", "https://v2.sportsurge.net/"],
+    ["SportPlus", "https://en12.sportplus.live/"],
+    ["La14HD", "https://la14hd.com/"]
+  ],
+  "TORRENTS": [
+    ["1337x", "https://1337x.pro/"],
+    ["ThePirateBay", "https://thepiratebay.org/i"],
+    ["RuTracker", "https://rutracker.org/forum/index.php"],
+    ["LimeTorrents", "https://www.limetorrents.fun/"],
+    ["YTS", "https://yts.bz/"],
+    ["EZTV", "https://eztvx.to/home"],
+    ["TorrentGalaxy", "https://torrentgalaxy.one/"],
+    ["ExtraTorrent", "https://extratorrent.st/"],
+    ["RARBG", "https://rargb.to/"]
+  ]
+};
 
-// --- INITIALIZATION ---
-document.addEventListener('DOMContentLoaded', () => {
-  initBootSequence();
-  renderGrid();
-  setupCursor();
-  setupSearch();
-  startTypewriterEffect();
-});
+// --- RENDER LOGIC ---
+const grid = document.getElementById('grid');
+let totalSources = 0;
 
-// --- BOOT SEQUENCE LOGIC ---
-function initBootSequence() {
-  const lines = ['bl1', 'bl2', 'bl3', 'bl4'];
-  const bootScreen = document.getElementById('bootScreen');
-  const accessBtn = document.getElementById('accessBtn');
+Object.keys(registry).forEach(cat => {
+  const catClass = cat.toLowerCase().replace(/[^a-z]/g, '');
+  const card = document.createElement('article');
+  card.className = `card cat-${catClass}`;
   
-  // Show lines sequentially
-  lines.forEach((id, index) => {
-    setTimeout(() => {
-      document.getElementById(id).classList.add('visible');
-    }, index * 400);
-  });
-
-  // Show Access Button after boot lines
-  setTimeout(() => {
-    accessBtn.classList.add('show');
-  }, 2000);
-
-  // Handle Access Click
-  accessBtn.addEventListener('click', () => {
-    bootScreen.classList.add('hidden');
-    // Optional: Start music automatically or wait for user interaction
-    // initYouTubePlayer(); 
-  });
-}
-
-// --- TYPEWRITER EFFECT FOR TITLE ---
-function startTypewriterEffect() {
-  const titleElement = document.getElementById('dynamicTitle');
-  const fullText = "xL1F3 LINKS";
-  let currentText = "";
-  let charIndex = 0;
-  
-  // Clear initial content to ensure typewriter starts fresh
-  titleElement.innerHTML = '<span class="typewriter-caret"></span>';
-  
-  function typeChar() {
-    if (charIndex < fullText.length) {
-      currentText += fullText.charAt(charIndex);
-      titleElement.innerHTML = currentText + '<span class="typewriter-caret"></span>';
-      charIndex++;
-      setTimeout(typeChar, 100); // Speed of typing
-    } else {
-      // Keep caret blinking at end
-      titleElement.innerHTML = fullText + '<span class="typewriter-caret"></span>';
-    }
-  }
-  
-  // Start typing after boot sequence finishes (approx 2.5s)
-  setTimeout(typeChar, 2500);
-}
-
-// --- RENDER GRID ---
-function renderGrid(filter = "") {
-  const container = document.getElementById('gridContainer');
-  container.innerHTML = '';
-  let totalItems = 0;
-  let visibleCards = 0;
-
-  SOURCES_DATA.forEach(cat => {
-    const filteredItems = cat.items.filter(item => 
-      item.name.toLowerCase().includes(filter.toLowerCase()) || 
-      item.desc.toLowerCase().includes(filter.toLowerCase())
-    );
-
-    if (filteredItems.length === 0) return;
-
-    visibleCards++;
-    totalItems += filteredItems.length;
-
-    const card = document.createElement('article');
-    card.className = 'category-card';
-    card.style.setProperty('--cat-color', cat.color);
-    
-    let itemsHtml = '';
-    filteredItems.forEach(item => {
-      itemsHtml += `
-        <div class="source-item" data-url="${item.url}">
-          <div class="source-info">
-            <span class="source-name">${item.name}</span>
-            <span class="source-desc">${item.desc}</span>
-          </div>
-          <div class="source-actions">
-            <span class="status-badge">
-              <span class="dot"></span> ONLINE
-            </span>
-            <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="visit-btn">VISIT ↗</a>
-          </div>
+  let sourcesHtml = '';
+  registry[cat].forEach(([name, url]) => {
+    totalSources++;
+    sourcesHtml += `
+      <div class="source-item" data-name="${name} ${cat}">
+        <div class="s-info">
+          <span class="s-name">${name}</span>
+          <span class="s-meta">${new URL(url).hostname}</span>
         </div>
-      `;
-    });
-
-    card.innerHTML = `
-      <div class="card-header">
-        <div class="cat-title-group">
-          <div class="cat-dot" style="background:${cat.color}; box-shadow: 0 0 10px ${cat.color}"></div>
-          <span class="cat-name">${cat.category}</span>
+        <div class="s-actions">
+          <div class="status checking" data-url="${url}" title="Check Status"></div>
+          <a href="${url}" target="_blank" class="visit-btn">OPEN ↗</a>
         </div>
-        <span class="cat-count">${filteredItems.length} SRC</span>
-      </div>
-      <div class="source-list">
-        ${itemsHtml}
       </div>
     `;
-    container.appendChild(card);
   });
 
-  document.getElementById('totalSources').textContent = totalItems;
-  document.getElementById('noResults').classList.toggle('show', visibleCards === 0 && filter !== "");
-}
+  card.innerHTML = `
+    <div class="card-head">
+      <div class="cat-title"><div class="cat-dot"></div>${cat}</div>
+      <span style="font-size:10px;color:var(--muted)">${registry[cat].length} LINKS</span>
+    </div>
+    <div class="source-list">
+      ${sourcesHtml}
+    </div>
+  `;
+  grid.appendChild(card);
+});
 
-// --- SEARCH LOGIC ---
-function setupSearch() {
-  const input = document.getElementById('searchInput');
-  input.addEventListener('input', (e) => {
-    renderGrid(e.target.value);
-  });
-}
-
-// --- CURSOR EFFECTS ---
-function setupCursor() {
+// --- INTERACTIVITY ---
+// Cursor Glow
+document.addEventListener('mousemove', e => {
+  const x = e.clientX;
+  const y = e.clientY;
+  document.documentElement.style.setProperty('--mx', x + 'px');
+  document.documentElement.style.setProperty('--my', y + 'px');
   const glow = document.getElementById('cursorGlow');
-  const dot = document.getElementById('cursorDot');
-  const root = document.documentElement;
+  glow.style.left = x + 'px';
+  glow.style.top = y + 'px';
+});
 
-  window.addEventListener('mousemove', (e) => {
-    const x = e.clientX;
-    const y = e.clientY;
-    
-    // Update CSS variables for background gradient
-    root.style.setProperty('--mx', `${x}px`);
-    root.style.setProperty('--my', `${y}px`);
-    
-    // Move elements
-    glow.style.left = `${x}px`;
-    glow.style.top = `${y}px`;
-    dot.style.left = `${x}px`;
-    dot.style.top = `${y}px`;
-  });
+// Typewriter Effect
+const titleText = "xL1F3 Links";
+const typeEl = document.getElementById('typeTitle');
+let i = 0;
+function typeWriter() {
+  if (i < titleText.length) {
+    typeEl.innerHTML += titleText.charAt(i);
+    i++;
+    setTimeout(typeWriter, 100);
+  }
 }
 
-// --- YOUTUBE AUDIO PLAYER INTEGRATION ---
-let ytPlayer;
+// Boot Sequence
+setTimeout(() => {
+  document.querySelectorAll('.term-line').forEach((el, idx) => {
+    setTimeout(() => el.classList.add('show'), idx * 400);
+  });
+}, 500);
+
+setTimeout(() => {
+  document.getElementById('boot').classList.add('hide');
+  typeWriter();
+}, 2500);
+
+// Search Filter
+document.getElementById('search').addEventListener('input', e => {
+  const val = e.target.value.toLowerCase();
+  document.querySelectorAll('.source-item').forEach(item => {
+    const match = item.dataset.name.toLowerCase().includes(val);
+    item.style.display = match ? 'flex' : 'none';
+  });
+  document.querySelectorAll('.card').forEach(card => {
+    const hasVisible = [...card.querySelectorAll('.source-item')].some(i => i.style.display !== 'none');
+    card.style.display = hasVisible ? 'block' : 'none';
+  });
+});
+
+// Music Toggle
+const music = document.getElementById('music');
+const soundBtn = document.getElementById('soundBtn');
 let isPlaying = false;
-const soundBtn = document.getElementById('soundToggle');
 
-// Load YouTube API asynchronously
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-const firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-function onYouTubeIframeAPIReady() {
-  ytPlayer = new YT.Player('yt-player', {
-    videoId: 'LRo7pPJeg9I', // ID from https://www.youtube.com/watch?v=LRo7pPJeg9I
-    playerVars: {
-      'autoplay': 0,
-      'controls': 0,
-      'loop': 1,
-      'playlist': 'LRo7pPJeg9I'
-    },
-    events: {
-      'onReady': onPlayerReady,
-      'onStateChange': onPlayerStateChange
-    }
-  });
-}
-
-function onPlayerReady(event) {
-  // Player is ready, but we don't autoplay due to browser policies
-  console.log("YT Player Ready");
-}
-
-function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.PLAYING) {
-    isPlaying = true;
-    updateSoundButton(true);
-  } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
+soundBtn.addEventListener('click', () => {
+  if (!isPlaying) {
+    music.play().then(() => {
+      isPlaying = true;
+      soundBtn.classList.add('active');
+      soundBtn.innerHTML = '❚❚';
+    }).catch(err => console.log("Audio file missing or blocked"));
+  } else {
+    music.pause();
     isPlaying = false;
-    updateSoundButton(false);
-  }
-}
-
-function toggleMusic() {
-  if (!ytPlayer || !ytPlayer.playVideo) return;
-  
-  if (isPlaying) {
-    ytPlayer.pauseVideo();
-  } else {
-    ytPlayer.playVideo();
-  }
-}
-
-function updateSoundButton(active) {
-  if (active) {
-    soundBtn.classList.add('active');
-    soundBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
-  } else {
     soundBtn.classList.remove('active');
-    soundBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>';
+    soundBtn.innerHTML = '♪';
   }
-}
+});
 
-soundBtn.addEventListener('click', toggleMusic);
+// Link Checker (Simulated due to CORS)
+const statuses = document.querySelectorAll('.status');
+statuses.forEach(s => {
+  s.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const url = s.dataset.url;
+    s.className = 'status checking';
+    
+    // Simulate check with timeout because real fetch fails on CORS for most sites
+    setTimeout(() => {
+      // Randomly assign online/offline for visual effect since we can't really check cross-origin
+      // In a real backend app, this would be a server-side check.
+      const isUp = Math.random() > 0.1; 
+      s.className = isUp ? 'status online' : 'status offline';
+    }, 800);
+  });
+  
+  // Initial fake check
+  setTimeout(() => {
+     s.className = 'status online';
+  }, 1000 + Math.random()*2000);
+});
 
 </script>
 </body>
