@@ -1,646 +1,475 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="xL1F3 Links — Advanced Curated Digital Source Registry.">
-<meta name="theme-color" content="#050607">
-<title>xL1F3 Links by xL1F3 software</title>
-
+<meta name="description" content="xL1F3 Links, registro curado de fuentes digitales.">
+<meta name="theme-color" content="#000000">
+<title>xL1F3 Links · Made by xL1F3 Software</title>
 <style>
 :root{
-  --bg:#040506;
-  --panel:rgba(15, 20, 25, 0.65);
-  --panel-hover:rgba(20, 25, 30, 0.85);
-  --line:rgba(255,255,255,.08);
-  --text:#f4f7f5;
-  --muted:#7f8b86;
-  --green:#00ff78;
-  --cyan:#00eaff;
-  --purple:#a855ff;
-  --danger:#ff4d67;
-  --yellow:#ffd84d;
-  --mono:"JetBrains Mono","Fira Code",Consolas,monospace;
-  --sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
-  --mx:50%;
-  --my:50%;
+  --bg:#000;--fg:#b8ffcf;--green:#00ff41;--dim:#2c7a45;--red:#ff3b5c;--cyan:#00e5ff;
+  --mono:"JetBrains Mono","Fira Code",Consolas,"Courier New",monospace;
+  --p:0;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  min-height:100vh;
-  overflow-x:hidden;
-  color:var(--text);
-  font-family:var(--sans);
-  background:
-    radial-gradient(800px circle at var(--mx) var(--my),rgba(0,255,120,.06),transparent 40%),
-    radial-gradient(600px circle at 10% 10%,rgba(168,85,247,.05),transparent 40%),
-    linear-gradient(135deg,#030405,#07090a 55%,#020303);
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font-family:var(--mono);overflow-x:hidden;font-size:15px;line-height:1.5}
+body:before{ /* scanlines CRT */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.18;
+  background:repeating-linear-gradient(to bottom,transparent 0 2px,rgba(0,0,0,.9) 2px 3px);
 }
-/* Grid Background */
-body:after{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
-  background-image:
-    linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:50px 50px;
-  mask-image:linear-gradient(to bottom,black,transparent 90%);
+body:after{ /* viñeta */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:901;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.85) 100%);
 }
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit;background:none;border:none;outline:none}
 ::selection{background:var(--green);color:#000}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#030405}
-::-webkit-scrollbar-thumb{background:#26312c;border-radius:10px}
-::-webkit-scrollbar-thumb:hover{background:var(--green)}
-a{text-decoration:none;color:inherit}
-button,input{font:inherit;border:none;outline:none}
-.shell{width:min(1300px,calc(100% - 40px));margin:auto}
+:focus-visible{outline:1px solid var(--green);outline-offset:4px}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#000}::-webkit-scrollbar-thumb{background:#174d2a}::-webkit-scrollbar-thumb:hover{background:var(--green)}
 
-/* Cursor Glow */
-.cursor-glow{
-  position:fixed;left:0;top:0;width:500px;height:500px;border-radius:50%;
-  pointer-events:none;z-index:0;transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(0,255,120,.08),transparent 60%);
-  mix-blend-mode:screen;transition:opacity .1s;
-}
+/* progreso de scroll */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;background:var(--green);box-shadow:0 0 12px var(--green);transform-origin:0 50%;transform:scaleX(var(--p));z-index:950}
 
-/* Boot Screen */
-.boot{
-  position:fixed;inset:0;background:#020303;z-index:2000;
-  display:grid;place-items:center;padding:25px;
-  transition:opacity .8s,visibility .8s;
-}
-.boot.hide{opacity:0;visibility:hidden;pointer-events:none}
-.terminal{
-  width:min(700px,100%);border:1px solid rgba(0,255,120,.2);
-  background:rgba(5,8,6,.95);box-shadow:0 0 50px rgba(0,0,0,.5);
-  border-radius:8px;overflow:hidden;font-family:var(--mono);
-}
-.termbar{height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02)}
-.termbar i{width:8px;height:8px;border-radius:50%}
-.termbar i:nth-child(1){background:#ff5f57}
-.termbar i:nth-child(2){background:#ffbd2e}
-.termbar i:nth-child(3){background:#28c840}
-.termbody{padding:20px;color:#9dfbc0;font-size:12px;line-height:1.6;min-height:200px}
-.term-line{opacity:0;margin-bottom:4px}.term-line.show{opacity:1}
-.progress-bar{height:2px;background:#132018;margin-top:15px;width:100%}
-.progress-fill{height:100%;width:0;background:var(--green);box-shadow:0 0 10px var(--green);animation:load 2s ease forwards}
-@keyframes load{to{width:100%}}
+/* cursor de bloque para type effects */
+.typing:after,.caret:after{content:"█";margin-left:2px;color:var(--green);animation:blink 1s steps(1) infinite}
+.caret:after{display:inline}
+@keyframes blink{50%{opacity:0}}
 
-/* Header */
-header{
-  position:sticky;top:0;z-index:100;
-  border-bottom:1px solid var(--line);
-  background:rgba(4,5,6,.7);backdrop-filter:blur(15px);
-  padding:15px 0;
-}
-.nav{display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:12px}
-.logo-icon{
-  width:32px;height:32px;background:var(--green);border-radius:6px;
-  display:grid;place-items:center;color:#000;font-weight:900;font-family:var(--mono);
-  box-shadow:0 0 15px rgba(0,255,120,.3);
-}
-.brand-text h2{font-size:16px;font-weight:800;letter-spacing:-0.5px}
-.brand-text span{font-size:10px;color:var(--muted);font-family:var(--mono)}
-.nav-actions{display:flex;gap:10px;align-items:center}
-.btn-nav{
-  padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;
-  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted);
-  transition:.3s;
-}
-.btn-nav:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,120,.05)}
-.sound-btn{
-  width:36px;height:36px;border-radius:6px;display:grid;place-items:center;
-  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted);
-  cursor:pointer;transition:.3s;
-}
-.sound-btn.active{color:var(--green);border-color:var(--green);box-shadow:0 0 10px rgba(0,255,120,.2)}
+/* HERO */
+.hero{position:relative;height:100vh;min-height:640px;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(20px,6vw,90px);overflow:hidden}
+#rain{position:absolute;inset:0;width:100%;height:100%;opacity:.22;z-index:0}
+.hero-in{position:relative;z-index:1;max-width:900px;transform:translateY(calc(var(--p) * -140px));opacity:calc(1 - var(--p) * 1.8)}
+.sys{color:var(--dim);font-size:13px;margin-bottom:24px;min-height:1.5em}
+.glitch{position:relative;font-size:clamp(3rem,10vw,8.5rem);font-weight:800;letter-spacing:-.02em;line-height:.95;color:var(--green);text-shadow:0 0 18px rgba(0,255,65,.35)}
+.glitch:before,.glitch:after{content:attr(data-text);position:absolute;inset:0;background:var(--bg);overflow:hidden}
+.glitch:before{color:var(--cyan);left:3px;clip-path:polygon(0 0,100% 0,100% 35%,0 35%);animation:g1 3.2s infinite steps(1)}
+.glitch:after{color:var(--red);left:-3px;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);animation:g2 2.7s infinite steps(1)}
+@keyframes g1{0%,90%,100%{transform:translate(0)}92%{transform:translate(-4px,0)}94%{transform:translate(3px,0)}96%{transform:translate(0)}}
+@keyframes g2{0%,85%,100%{transform:translate(0)}87%{transform:translate(4px,0)}89%{transform:translate(-3px,0)}}
+.tag{margin-top:26px;font-size:clamp(1rem,1.8vw,1.2rem);color:var(--fg);min-height:1.6em}
+.prompt{display:flex;align-items:center;gap:10px;margin-top:36px;border:1px solid var(--dim);padding:12px 16px;max-width:560px;transition:border-color .2s,box-shadow .2s}
+.prompt:focus-within{border-color:var(--green);box-shadow:0 0 18px rgba(0,255,65,.2)}
+.prompt span{color:var(--green);white-space:nowrap}
+.prompt input{flex:1;min-width:0;color:var(--green);caret-color:var(--green);font-family:var(--mono)}
+.prompt input::placeholder{color:var(--dim)}
+.count{margin-top:12px;font-size:12px;color:var(--dim);min-height:1.2em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;max-width:760px}
+.chip{font-size:12px;padding:4px 10px;border:1px solid var(--dim);cursor:pointer;transition:.15s}
+.chip:hover{color:#000;background:var(--green);border-color:var(--green)}
+.chip[aria-pressed="true"]{color:#000;background:var(--green);border-color:var(--green)}
+.scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--dim);letter-spacing:.2em;text-align:center;z-index:1}
+.scroll-cue b{display:block;font-weight:400;animation:bob 1.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
 
-/* Hero */
-.hero{text-align:center;padding:80px 0 60px;position:relative}
-.badge{
-  display:inline-block;padding:4px 10px;border-radius:20px;
-  background:rgba(0,255,120,.1);border:1px solid rgba(0,255,120,.2);
-  color:var(--green);font:10px var(--mono);letter-spacing:1px;text-transform:uppercase;
-  margin-bottom:20px;
-}
-h1{
-  font-size:clamp(3rem, 6vw, 5rem);font-weight:900;line-height:1;
-  margin-bottom:15px;letter-spacing:-2px;
-}
-.hacker-text{
-  font-family:var(--mono);font-size:0.2em;color:var(--green);
-  display:block;margin-bottom:10px;text-shadow:0 0 10px rgba(0,255,120,.4);
-}
-.hero p{color:var(--muted);max-width:600px;margin:0 auto 30px}
-.search-box{
-  max-width:500px;margin:0 auto;position:relative;
-}
-.search-input{
-  width:100%;padding:14px 20px;border-radius:10px;
-  background:rgba(255,255,255,.03);border:1px solid var(--line);
-  color:white;font-size:14px;transition:.3s;
-}
-.search-input:focus{border-color:var(--green);box-shadow:0 0 20px rgba(0,255,120,.1)}
+/* VOLUMEN */
+.vol{position:fixed;top:14px;right:18px;z-index:960;font-size:12px;border:1px solid var(--dim);padding:6px 12px;background:rgba(0,0,0,.7);cursor:pointer;transition:.15s;letter-spacing:.05em}
+.vol:hover{border-color:var(--green);color:var(--green)}
+.vol.on{color:var(--green);border-color:var(--green);box-shadow:0 0 10px rgba(0,255,65,.25)}
 
-/* Grid & Cards */
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:20px;padding-bottom:80px;
-}
-.card{
-  background:var(--panel);border:1px solid var(--line);border-radius:12px;
-  overflow:hidden;transition:.3s;position:relative;
-  backdrop-filter:blur(10px);
-}
-.card:hover{
-  transform:translateY(-5px);border-color:rgba(0,255,120,.3);
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
-}
-.card-head{
-  padding:15px 20px;border-bottom:1px solid var(--line);
-  display:flex;justify-content:space-between;align-items:center;
-  background:rgba(255,255,255,.02);
-}
-.cat-title{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
-.cat-dot{width:6px;height:6px;border-radius:50%;background:var(--muted)}
-/* Category Colors */
-.cat-adblock .cat-dot{background:#ff4d67;box-shadow:0 0 8px #ff4d67}
-.cat-anime .cat-dot{background:#a855ff;box-shadow:0 0 8px #a855ff}
-.cat-apps .cat-dot{background:#00eaff;box-shadow:0 0 8px #00eaff}
-.cat-games .cat-dot{background:#00ff78;box-shadow:0 0 8px #00ff78}
-.cat-vpn .cat-dot{background:#ffd84d;box-shadow:0 0 8px #ffd84d}
+/* SECCIONES */
+main{position:relative;z-index:2;padding:0 clamp(20px,6vw,90px) 40px}
+.sec{min-height:90vh;padding:120px 0 40px;border-top:1px solid #0f2a18;position:relative}
+.sec-head{font-size:clamp(1.6rem,4vw,3rem);font-weight:700;color:var(--green);min-height:1.3em;margin-bottom:8px}
+.sec-meta{color:var(--dim);font-size:12px;margin-bottom:36px;min-height:1.2em}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px 28px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;border-left:2px solid transparent;opacity:0;transform:translateX(-14px);transition:opacity .5s,transform .5s,border-color .2s,background .2s}
+.row.in{opacity:1;transform:none}
+.row:hover{border-left-color:var(--green);background:rgba(0,255,65,.05);text-shadow:0 0 8px rgba(0,255,65,.5)}
+.row .pfx{color:var(--dim)}
+.row .txt{min-width:0;flex:1}
+.row .name{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--fg)}
+.row .host{display:block;font-size:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .go{font-size:11px;color:var(--dim);white-space:nowrap;border:1px solid transparent;padding:2px 6px;transition:.2s}
+.row:hover .go{color:#000;background:var(--green);border-color:var(--green)}
+.row mark{background:var(--green);color:#000;padding:0 1px}
+.sec.hidden{display:none}
+.none{display:none;padding:100px 0;font-size:18px;color:var(--red)}
+.none.show{display:block}
 
-.source-list{padding:10px}
-.source-item{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:10px 12px;border-radius:6px;transition:.2s;
-  border:1px solid transparent;
-}
-.source-item:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.05)}
-.s-info{min-width:0}
-.s-name{font-size:13px;font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.s-meta{font-size:10px;color:var(--muted);font-family:var(--mono)}
-.s-actions{display:flex;gap:8px;align-items:center}
-.status{
-  width:8px;height:8px;border-radius:50%;background:#333;
-  cursor:pointer;position:relative;
-}
-.status.checking{background:var(--yellow);box-shadow:0 0 5px var(--yellow)}
-.status.online{background:var(--green);box-shadow:0 0 5px var(--green)}
-.status.offline{background:var(--danger);box-shadow:0 0 5px var(--danger)}
-.visit-btn{
-  font-size:10px;padding:4px 8px;border-radius:4px;
-  background:rgba(255,255,255,.1);color:var(--muted);
-  transition:.2s;
-}
-.source-item:hover .visit-btn{background:var(--green);color:#000}
+/* FOOTER */
+footer{position:relative;z-index:2;padding:120px clamp(20px,6vw,90px) 40px;border-top:1px solid #0f2a18}
+.foot-title{font-size:clamp(2rem,5vw,4rem);color:var(--green);min-height:1.3em}
+.foot-text{margin-top:20px;max-width:60ch;color:var(--fg);min-height:3em}
+.mail{display:inline-block;margin-top:24px;color:var(--green);border-bottom:1px solid var(--green);font-size:clamp(1.1rem,2.4vw,1.6rem)}
+.mail:hover{text-shadow:0 0 12px var(--green)}
+.brand{margin-top:70px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--dim);font-size:12px}
 
-/* Footer */
-footer{
-  border-top:1px solid var(--line);padding:40px 0;text-align:center;
-  color:var(--muted);font-size:12px;
+@media (max-width:760px){
+  .list{grid-template-columns:1fr}
+  .scroll-cue{display:none}
+  .vol{top:auto;bottom:14px;right:14px}
 }
-.footer-brand{color:var(--green);font-family:var(--mono);font-weight:700;margin-top:5px}
-
-@media(max-width:768px){
-  .grid{grid-template-columns:1fr}
-  h1{font-size:2.5rem}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .glitch:before,.glitch:after,.scroll-cue b,.typing:after,.caret:after{animation:none}
+  .row{opacity:1;transform:none;transition:none}
+  .hero-in{transform:none;opacity:1}
 }
 </style>
 </head>
 <body>
 
-<div class="cursor-glow" id="cursorGlow"></div>
+<div id="progress"></div>
 
-<!-- Boot Terminal -->
-<div class="boot" id="boot">
-  <div class="terminal">
-    <div class="termbar"><i></i><i></i><i></i></div>
-    <div class="termbody">
-      <div class="term-line" id="t1">$ init xL1F3_registry_v3.sh</div>
-      <div class="term-line" id="t2">[OK] Loading modules: Anime, Games, VPN...</div>
-      <div class="term-line" id="t3">[OK] Verifying signature: xL1F3 software</div>
-      <div class="term-line" id="t4">[OK] System Ready.</div>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
-    </div>
-  </div>
-</div>
+<button class="vol" id="vol" aria-label="Música de fondo">[ MÚSICA: OFF ]</button>
+<audio id="bgm" src="sometimes.mp3" loop preload="auto"></audio>
 
-<header>
-  <div class="shell nav">
-    <div class="brand">
-      <div class="logo-icon">xL</div>
-      <div class="brand-text">
-        <h2>xL1F3 Links</h2>
-        <span>by xL1F3 software</span>
-      </div>
-    </div>
-    <div class="nav-actions">
-      <button class="sound-btn" id="soundBtn" title="Play Sometimes...">♪</button>
-      <a href="mailto:xl1f3@proton.me" class="btn-nav">Contact</a>
-    </div>
+<header class="hero" id="top">
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <p class="sys" data-type="> boot xL1F3_links --registry v5 --secure"></p>
+    <h1 class="glitch" data-text="xL1F3 LINKS">xL1F3 LINKS</h1>
+    <p class="tag" data-type="> directorio curado. lo que sirve, en un sitio."></p>
+    <label class="prompt" for="q">
+      <span>$ grep</span>
+      <input id="q" type="search" placeholder="anime, vpn, libros…" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="count" id="count" aria-live="polite"></div>
+    <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
   </div>
+  <div class="scroll-cue"><b>▼</b>scroll</div>
 </header>
 
-<main class="shell">
-  <section class="hero">
-    <div class="badge">Source Registry v3.0</div>
-    <h1>
-      <span class="hacker-text">$ <span id="typeTitle"></span><span style="animation:blink 1s infinite">_</span></span>
-      DIGITAL ACCESS
-    </h1>
-    <p>Curated directory of high-priority digital sources. Fast, secure, and verified.</p>
-    <div class="search-box">
-      <input type="text" class="search-input" id="search" placeholder="Search sources (e.g., 'Anime', 'VPN', 'FitGirl')...">
-    </div>
-  </section>
-
-  <section class="grid" id="grid">
-    <!-- Content injected via JS for cleaner code structure -->
-  </section>
-
-  <div style="text-align:center;margin-bottom:60px">
-    <a href="mailto:xl1f3@proton.me" class="btn-nav" style="padding:12px 24px;font-size:14px;border-color:var(--green);color:var(--green)">
-      Report Broken Link →
-    </a>
-  </div>
-</main>
+<main id="sections"></main>
+<div class="none" id="none">// sin coincidencias</div>
 
 <footer>
-  <div class="shell">
-    <p>&copy; 2026 xL1F3 Links. All rights reserved.</p>
-    <div class="footer-brand">By xL1F3 software</div>
+  <h3 class="foot-title" data-type="¿algo no funciona?"></h3>
+  <p class="foot-text" data-type="avísame y lo quito. los enlaces no se comprueban desde esta página, así que tu reporte es lo que los mantiene vivos."></p>
+  <a class="mail" href="mailto:xl1f3@proton.me">xl1f3@proton.me</a>
+  <div class="brand">
+    <span>© 2026 xL1F3 Links</span>
+    <span>Made by xL1F3 Software ;)</span>
   </div>
 </footer>
 
-<audio id="music" loop src="sometimes.mp3"></audio>
-
 <script>
-// --- DATA REGISTRY ---
 const registry = {
   "ADBLOCKERS": [
-    ["AdBlock Plus", "https://adblockplus.org/"],
-    ["GetAdBlock", "https://getadblock.com/"],
-    ["AdGuard", "https://adguard.com/"],
-    ["uBlock Origin", "https://ublockorigin.com/"],
-    ["Blokada", "https://blokada.org/"],
-    ["Poper Blocker", "https://poperblocker.com/"]
+    ["AdBlock Plus","https://adblockplus.org/"],["GetAdBlock","https://getadblock.com/"],
+    ["AdGuard","https://adguard.com/"],["uBlock Origin","https://ublockorigin.com/"],
+    ["Blokada","https://blokada.org/"]
   ],
   "ANIME": [
-    ["Anime Nexus", "https://anime.nexus/"],
-    ["AnimeKai", "https://animekai.to/home"],
-    ["HiAnime", "https://hianime.ro/"],
-    ["Aniwaves", "https://aniwaves.ru/"],
-    ["AniZone", "https://anizone.to/"],
-    ["Miruro", "https://www.miruro.to/"],
-    ["AniTaku", "https://anitaku.io/"],
-    ["GogoAnime", "https://wvv.gogoanime.org.vc/"],
-    ["Animetsu", "https://animetsu.bz/"],
-    ["AnimeX", "https://animex.one/home"],
-    ["AnimeGG", "https://www.animegg.org/"],
-    ["UniqueStream", "https://anime.uniquestream.net/"],
-    ["KissAnime", "https://kissanime.com.ru/"],
-    ["AniWorld", "https://aniworld.to/"],
-    ["WCOStream", "https://www.wcostream.tv/"],
-    ["123Anime", "https://w1.123animes.ru/"]
+    ["Anime Nexus","https://anime.nexus/"],["AnimeKai","https://animekai.to/home"],
+    ["HiAnime","https://hianime.ro/"],["Aniwaves","https://aniwaves.ru/"],
+    ["AniZone","https://anizone.to/"],["Miruro","https://www.miruro.to/"],
+    ["AniTaku","https://anitaku.io/"],["Animetsu","https://animetsu.bz/"],
+    ["AnimeX","https://animex.one/home"],["AnimeGG","https://www.animegg.org/"],
+    ["UniqueStream","https://anime.uniquestream.net/"],["AniWorld","https://aniworld.to/"],
+    ["WCOStream","https://www.wcostream.tv/"]
   ],
-  "APPS / STORES": [
-    ["MyFlixerFree", "https://myflixerfree.com/"],
-    ["HappyMod", "https://happymod.ac/"],
-    ["Uptodown", "https://uptodown.com/"],
-    ["Download.it", "https://download.it/"],
-    ["APKPure", "https://apkpure.com/"],
-    ["ModCombo", "https://modcombo.com/"]
+  "APPS / TIENDAS": [
+    ["HappyMod","https://happymod.ac/"],["Uptodown","https://uptodown.com/"],
+    ["Download.it","https://download.it/"],["APKPure","https://apkpure.com/"],
+    ["ModCombo","https://modcombo.com/"],["Aptoide","https://aptoide.com/"]
   ],
-  "ASIAN DRAMA": [
-    ["KissKH", "https://kisskh.id/"],
-    ["GoPlay", "https://goplay.su/"],
-    ["AsiaFlix", "https://asiaflix.net/home"],
-    ["KissAsian", "https://ww14.kissasian.com.lv/"],
-    ["DramaCool", "https://dramacooll.fun/"],
-    ["AsianCtv", "https://asianctv.cc/"],
-    ["MyAsianTV", "https://myasiantv.com.bz/"],
-    ["KissKH Club", "https://kisskh.club/"],
-    ["TVMi", "https://tvmi.mt/"]
+  "DRAMA ASIÁTICO": [
+    ["KissKH","https://kisskh.id/"],["GoPlay","https://goplay.su/"],
+    ["AsiaFlix","https://asiaflix.net/home"],["KissAsian","https://ww14.kissasian.com.lv/"],
+    ["DramaCool","https://dramacooll.fun/"],["AsianCtv","https://asianctv.cc/"],
+    ["MyAsianTV","https://myasiantv.com.bz/"],["TVMi","https://tvmi.mt/"]
   ],
-  "COMICS": [
-    ["ReadComicOnline", "https://readcomiconline.li/"],
-    ["ReadComicsOnline", "https://readcomicsonline.ru/"],
-    ["Batcave", "https://batcave.biz/"],
-    ["XoxoComic", "https://xoxocomic.com/"],
-    ["GlobalComix", "https://globalcomix.com/browse/en/comics"],
-    ["FreeComicBookDay", "https://www.freecomicbookday.com/comics"],
-    ["StoryBerries", "https://www.storyberries.com/category/comic-books-for-kids/"],
-    ["Hoopla", "https://www.hoopladigital.com/"]
+  "CÓMICS": [
+    ["ReadComicOnline","https://readcomiconline.li/"],["ReadComicsOnline","https://readcomicsonline.ru/"],
+    ["Batcave","https://batcave.biz/"],["XoxoComic","https://xoxocomic.com/"],
+    ["GlobalComix","https://globalcomix.com/browse/en/comics"],
+    ["FreeComicBookDay","https://www.freecomicbookday.com/comics"],
+    ["Hoopla","https://www.hoopladigital.com/"]
   ],
-  "EBOOKS": [
-    ["Z-Library", "https://z-lib.fm/"],
-    ["LibGen", "https://libgen.li/"],
-    ["Anna's Archive", "https://annas-archive.gl/"],
-    ["Ebook-Hunter", "https://ebook-hunter.org/"],
-    ["Plough", "https://www.plough.com/"],
-    ["Ebooks.com", "https://www.ebooks.com/"],
-    ["Gutenberg", "https://www.gutenberg.org/"],
-    ["OpenLibrary", "https://openlibrary.org/"],
-    ["TapeAids", "https://tapeaids.com/"],
-    ["DigitalBook", "https://www.digitalbook.io/"],
-    ["AudiobooksNow", "https://www.audiobooksnow.com/"],
-    ["LibriVox", "https://librivox.org/"],
-    ["Audiobooks.com", "https://www.audiobooks.com/"],
-    ["AudioBookBay", "https://audiobookbay.lu/"],
-    ["Nepu eBooks", "https://nepu.to/ebooks"],
-    ["Foxit Reader", "https://www.foxit.com/pdf-reader/"],
-    ["Flowoss", "https://www.flowoss.com/"],
-    ["Adobe Reader", "https://get.adobe.com/reader/"]
+  "LIBROS": [
+    ["Z-Library","https://z-lib.fm/"],["LibGen","https://libgen.li/"],
+    ["Anna's Archive","https://annas-archive.gl/"],["Ebook-Hunter","https://ebook-hunter.org/"],
+    ["Plough","https://www.plough.com/"],["Ebooks.com","https://www.ebooks.com/"],
+    ["Gutenberg","https://www.gutenberg.org/"],["OpenLibrary","https://openlibrary.org/"],
+    ["DigitalBook","https://www.digitalbook.io/"],["LibriVox","https://librivox.org/"],
+    ["Audiobooks.com","https://www.audiobooks.com/"],["AudioBookBay","https://audiobookbay.lu/"],
+    ["Foxit Reader","https://www.foxit.com/pdf-reader/"],["Adobe Reader","https://get.adobe.com/reader/"]
   ],
-  "ENCYCLOPEDIAS": [
-    ["Wikipedia", "https://wikipedia.com/"],
-    ["Britannica", "https://www.britannica.com/"],
-    ["Scholarpedia", "https://www.scholarpedia.org/"],
-    ["Citizendium", "https://en.citizendium.org/"],
-    ["HandWiki", "https://handwiki.org/wiki/"],
-    ["Appropedia", "https://www.appropedia.org/"],
-    ["Wiktionary", "https://www.wiktionary.org/"],
-    ["Wikibooks", "https://www.wikibooks.org/"],
-    ["WikiHow", "https://www.wikihow.com/Main-Page"],
-    ["Encyclopedia.com", "https://www.encyclopedia.com/"],
-    ["EOL", "https://eol.org/"]
+  "ARCHIVOS PÚBLICOS": [
+    ["Internet Archive","https://archive.org/"],["Wikimedia Commons","https://commons.wikimedia.org/"],
+    ["arXiv","https://arxiv.org/"],["MIT OpenCourseWare","https://ocw.mit.edu/"],
+    ["OpenStax","https://openstax.org/"],["Khan Academy","https://www.khanacademy.org/"],
+    ["Library of Congress","https://www.loc.gov/"]
   ],
-  "GAMES": [
-    ["Poki", "https://poki.co.com/"],
-    ["Geometry Dash", "https://geometrydash.us.com/"],
-    ["CrazyGames", "https://crazygames.com/"],
-    ["Poki Global", "https://poki.com/"],
-    ["HoodaMath", "https://hoodamath.co.com/"],
-    ["DriftBoss", "https://driftboss.co.com/"],
-    ["Friv", "https://www.friv.com/"],
-    ["PlayHop", "https://playhop.com/"],
-    ["CoolMathGames", "https://coolmathgames.com/"],
-    ["MathPlayground", "https://mathplayground.com/"],
-    ["Kongregate", "https://www.kongregate.com/en"],
-    ["AARP Games", "https://www.aarp.org/"],
-    ["Epic Games", "https://store.epicgames.com/en-US/free-games"],
-    ["AddictingGames", "https://www.addictinggames.com/"],
-    ["Google Play", "https://play.google.com/"],
-    ["HappyModz", "https://happymodz.org/"],
-    ["Aptoide", "https://aptoide.com/"],
-    ["AN1", "https://an1.com/"],
-    ["FileHippo", "https://filehippo.com/"],
-    ["HHappyMod", "https://hhappymod.com/"],
-    ["APKTodo", "https://apktodo.io/"],
-    ["KingModAPK", "https://kingmodapk.net/"],
-    ["APKModGet", "https://apkmodget.com/"],
-    ["SteamRip", "https://steamrip.com/"],
-    ["Steam Store", "https://store.steampowered.com/"],
-    ["EA", "https://www.ea.com/"]
+  "ENCICLOPEDIAS": [
+    ["Wikipedia","https://wikipedia.org/"],["Britannica","https://www.britannica.com/"],
+    ["Scholarpedia","https://www.scholarpedia.org/"],["Citizendium","https://en.citizendium.org/"],
+    ["Wiktionary","https://www.wiktionary.org/"],["Wikibooks","https://www.wikibooks.org/"],
+    ["WikiHow","https://www.wikihow.com/Main-Page"],["Encyclopedia.com","https://www.encyclopedia.com/"]
+  ],
+  "JUEGOS": [
+    ["Poki","https://poki.com/"],["CrazyGames","https://crazygames.com/"],
+    ["Friv","https://www.friv.com/"],["PlayHop","https://playhop.com/"],
+    ["CoolMathGames","https://coolmathgames.com/"],["MathPlayground","https://mathplayground.com/"],
+    ["Kongregate","https://www.kongregate.com/en"],["AddictingGames","https://www.addictinggames.com/"],
+    ["Epic Games","https://store.epicgames.com/en-US/free-games"],["Steam Store","https://store.steampowered.com/"],
+    ["EA","https://www.ea.com/"],["Google Play","https://play.google.com/"],
+    ["AN1","https://an1.com/"],["FileHippo","https://filehippo.com/"]
   ],
   "VPN": [
-    ["NordVPN", "https://nordvpn.com/"],
-    ["Surfshark", "https://surfshark.com/"],
-    ["ExpressVPN", "https://go.expressvpn.com/"],
-    ["PandaVPN", "https://pandavpnpro.com/"],
-    ["TurboVPN", "https://turbovpn.com/"],
-    ["SuperVPN", "https://vpnsuper.com/"],
-    ["ProtonVPN", "https://protonvpn.com/"],
-    ["FreeVPNPlanet", "https://freevpnplanet.com/"],
-    ["UrbanVPN", "https://www.urban-vpn.com/"],
-    ["Hola", "https://hola.org/"],
-    ["Psiphon", "https://psiphon.ca/"]
+    ["NordVPN","https://nordvpn.com/"],["Surfshark","https://surfshark.com/"],
+    ["ExpressVPN","https://go.expressvpn.com/"],["ProtonVPN","https://protonvpn.com/"],
+    ["UrbanVPN","https://www.urban-vpn.com/"],["Hola","https://hola.org/"],
+    ["Psiphon","https://psiphon.ca/"]
   ],
-  "LIVE TV": [
-    ["TheTVApp", "https://thetvappp.com/"],
-    ["Famelack", "https://famelack.com/"],
-    ["TheTVApp.to", "https://thetvapp.to/"],
-    ["DLHD", "https://dlhd.link/24-7-channels.php"],
-    ["TV247US", "https://tv247us.live/"],
-    ["NTVStream", "https://ntvstream.cx/channels"],
-    ["IPTV-Web", "https://iptv-web.app/"],
-    ["PublicIPTV", "https://publiciptv.com/"]
+  "TV EN VIVO": [
+    ["Famelack","https://famelack.com/"],["TheTVApp","https://thetvapp.to/"],
+    ["DLHD","https://dlhd.link/24-7-channels.php"],["TV247US","https://tv247us.live/"],
+    ["IPTV-Web","https://iptv-web.app/"],["PublicIPTV","https://publiciptv.com/"]
   ],
   "MANGA": [
-    ["Comix.to", "https://comix.to/"],
-    ["MangaFire", "https://mangafire.to/home"],
-    ["MangaHaven", "https://mangahaven.net/"],
-    ["MangaTaro", "https://mangataro.org/"],
-    ["MangaDex", "https://mangadex.org/"],
-    ["AllManga", "https://allmanga.to/manga"],
-    ["MangaGo", "https://mangago.me/"],
-    ["WeebCentral", "https://weebcentral.com/"],
-    ["Manganato", "https://www.manganato.gg/"],
-    ["Kagane", "https://kagane.org/"]
+    ["Comix.to","https://comix.to/"],["MangaFire","https://mangafire.to/home"],
+    ["MangaHaven","https://mangahaven.net/"],["MangaDex","https://mangadex.org/"],
+    ["AllManga","https://allmanga.to/manga"],["MangaGo","https://mangago.me/"],
+    ["WeebCentral","https://weebcentral.com/"],["Manganato","https://www.manganato.gg/"]
   ],
-  "MOVIES / TV": [
-    ["Wooflix", "https://wooflix.stream/"],
-    ["MyFlixerFree", "https://myflixerfree.com/"],
-    ["Viki", "https://www.viki.com/categories/watch-free/genre/all"],
-    ["Ramoflix", "https://ramoflix.net/"],
-    ["DoraWatch", "https://dorawatch.one/"],
-    ["WMovies", "https://wmovies.one/"],
-    ["HydraHD", "https://hydrahd.ru/"],
-    ["Cineby", "https://www.cineby.sc/"],
-    ["FlickyStream", "https://flickystream.ru/"],
-    ["Yflix", "https://yflix.to/home"],
-    ["Cinema.bz", "https://cinema.bz/"],
-    ["Flixer", "https://flixer.su/"],
-    ["WeTV", "https://wetv.vip/"],
-    ["Goojara", "https://ww1.goojara.to/"],
-    ["StreamVaults", "https://streamvaults.ru/"],
-    ["67Movies", "https://67movies.net/"]
+  "PELÍCULAS / SERIES": [
+    ["Viki","https://www.viki.com/categories/watch-free/genre/all"],["Ramoflix","https://ramoflix.net/"],
+    ["Cineby","https://www.cineby.sc/"],["Yflix","https://yflix.to/home"],
+    ["Flixer","https://flixer.su/"],["Goojara","https://ww1.goojara.to/"]
   ],
-  "MUSIC": [
-    ["SpotDownloader", "https://spotdownloader.com/"],
-    ["SpotifyMate", "https://spotifymate.com/en"],
-    ["SpotMate", "https://spotmate.online/"],
-    ["Y2Mate", "https://v3.y2mate.nu/"],
-    ["SaveFrom", "https://en1.savefrom.net/"],
-    ["YTDown", "https://app.ytdown.to/en27/"],
-    ["DownCloud", "https://downcloudme.com/enTc/"],
-    ["SCloudPlaylist", "https://scloudplaylistdownloader.app/en1/"],
-    ["SoundLoadMate", "https://soundloadmate.net/"],
-    ["FreeMusicArchive", "https://freemusicarchive.org/"],
-    ["MusOpen", "https://musopen.org/"],
-    ["Racoon", "https://shailendramaurya.github.io/racoon/"],
-    ["Ytiz", "https://ytiz.xyz/"],
-    ["Lucida", "https://lucida.to/"],
-    ["Cobalt", "https://cobalt.tools/"]
+  "MÚSICA": [
+    ["SpotDownloader","https://spotdownloader.com/"],["SpotifyMate","https://spotifymate.com/en"],
+    ["Y2Mate","https://v3.y2mate.nu/"],["SaveFrom","https://en1.savefrom.net/"],
+    ["FreeMusicArchive","https://freemusicarchive.org/"],["MusOpen","https://musopen.org/"],
+    ["Lucida","https://lucida.to/"],["Cobalt","https://cobalt.tools/"]
   ],
-  "NEWS": [
-    ["BBC Live", "https://www.bbc.com/watch-live-news"],
-    ["CNN Fast", "https://edition.cnn.com/videos/fast/cnni-fast"],
-    ["AlJazeera", "https://www.aljazeera.com/video/live"],
-    ["Sky News", "https://news.sky.com/watch-live"],
-    ["ABC News", "https://abcnews.com/live"],
-    ["CBS News", "https://www.cbsnews.com/live/"],
-    ["LiveNowFox", "https://www.livenowfox.com/live"],
-    ["NDTV", "https://www.ndtv.com/livetv-ndtv24x7"],
-    ["Reuters", "https://www.reuters.com/live/"],
-    ["Euronews", "https://www.euronews.com/live"]
+  "NOTICIAS": [
+    ["BBC Live","https://www.bbc.com/watch-live-news"],["CNN Fast","https://edition.cnn.com/videos/fast/cnni-fast"],
+    ["AlJazeera","https://www.aljazeera.com/video/live"],["Sky News","https://news.sky.com/watch-live"],
+    ["ABC News","https://abcnews.com/live"],["CBS News","https://www.cbsnews.com/live/"],
+    ["Reuters","https://www.reuters.com/live/"],["Euronews","https://www.euronews.com/live"]
   ],
-  "SPORTS": [
-    ["FutbolLibre", "https://futbollibre.co.com/"],
-    ["LiveTV", "https://livetv.sx/enx/"],
-    ["TotalSportek", "https://totalsportek.events/"],
-    ["NTV.cx", "https://ntv.cx/"],
-    ["StreamEast", "https://v2.streameast.ga/"],
-    ["FCTV33", "https://www.fctv33.hair/"],
-    ["MethStreams", "https://methstreams.ms/"],
-    ["SportsBite", "https://sportsbite.sbs/schedule"],
-    ["Sport71", "https://beta.sport71.pro/"],
-    ["SportyHunter", "https://sportyhunter.com/"],
-    ["WatchSports", "https://watchsports.to/"],
-    ["CrackStreams", "https://crackstreams.io/"],
-    ["OnHockey", "http://onhockey.tv/"],
-    ["LiveTV861", "https://livetv861.me/enx/"],
-    ["StrikeOut", "https://strikeout.im/"],
-    ["WatchFooty", "https://www.watchfooty.st/en"],
-    ["Sportsurge", "https://v2.sportsurge.net/"],
-    ["SportPlus", "https://en12.sportplus.live/"],
-    ["La14HD", "https://la14hd.com/"]
+  "DEPORTES": [
+    ["LiveTV","https://livetv.sx/enx/"],["TotalSportek","https://totalsportek.events/"],
+    ["StreamEast","https://v2.streameast.ga/"],["MethStreams","https://methstreams.ms/"],
+    ["SportyHunter","https://sportyhunter.com/"],["WatchSports","https://watchsports.to/"],
+    ["CrackStreams","https://crackstreams.io/"],["StrikeOut","https://strikeout.im/"],
+    ["WatchFooty","https://www.watchfooty.st/en"],["Sportsurge","https://v2.sportsurge.net/"]
   ],
   "TORRENTS": [
-    ["1337x", "https://1337x.pro/"],
-    ["ThePirateBay", "https://thepiratebay.org/i"],
-    ["RuTracker", "https://rutracker.org/forum/index.php"],
-    ["LimeTorrents", "https://www.limetorrents.fun/"],
-    ["YTS", "https://yts.bz/"],
-    ["EZTV", "https://eztvx.to/home"],
-    ["TorrentGalaxy", "https://torrentgalaxy.one/"],
-    ["ExtraTorrent", "https://extratorrent.st/"],
-    ["RARBG", "https://rargb.to/"]
+    ["1337x","https://1337x.pro/"],["ThePirateBay","https://thepiratebay.org/i"],
+    ["RuTracker","https://rutracker.org/forum/index.php"],["LimeTorrents","https://www.limetorrents.fun/"],
+    ["YTS","https://yts.bz/"],["EZTV","https://eztvx.to/home"],["TorrentGalaxy","https://torrentgalaxy.one/"]
   ]
 };
 
-// --- RENDER LOGIC ---
-const grid = document.getElementById('grid');
-let totalSources = 0;
+/* ---------- helpers ---------- */
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hostOf = u => new URL(u).hostname.replace(/^www\./,'');
+const root = document.documentElement;
 
-Object.keys(registry).forEach(cat => {
-  const catClass = cat.toLowerCase().replace(/[^a-z]/g, '');
-  const card = document.createElement('article');
-  card.className = `card cat-${catClass}`;
-  
-  let sourcesHtml = '';
-  registry[cat].forEach(([name, url]) => {
-    totalSources++;
-    sourcesHtml += `
-      <div class="source-item" data-name="${name} ${cat}">
-        <div class="s-info">
-          <span class="s-name">${name}</span>
-          <span class="s-meta">${new URL(url).hostname}</span>
-        </div>
-        <div class="s-actions">
-          <div class="status checking" data-url="${url}" title="Check Status"></div>
-          <a href="${url}" target="_blank" class="visit-btn">OPEN ↗</a>
-        </div>
-      </div>
-    `;
-  });
-
-  card.innerHTML = `
-    <div class="card-head">
-      <div class="cat-title"><div class="cat-dot"></div>${cat}</div>
-      <span style="font-size:10px;color:var(--muted)">${registry[cat].length} LINKS</span>
-    </div>
-    <div class="source-list">
-      ${sourcesHtml}
-    </div>
-  `;
-  grid.appendChild(card);
-});
-
-// --- INTERACTIVITY ---
-// Cursor Glow
-document.addEventListener('mousemove', e => {
-  const x = e.clientX;
-  const y = e.clientY;
-  document.documentElement.style.setProperty('--mx', x + 'px');
-  document.documentElement.style.setProperty('--my', y + 'px');
-  const glow = document.getElementById('cursorGlow');
-  glow.style.left = x + 'px';
-  glow.style.top = y + 'px';
-});
-
-// Typewriter Effect
-const titleText = "xL1F3 Links";
-const typeEl = document.getElementById('typeTitle');
-let i = 0;
-function typeWriter() {
-  if (i < titleText.length) {
-    typeEl.innerHTML += titleText.charAt(i);
-    i++;
-    setTimeout(typeWriter, 100);
-  }
+/* ---------- type in / type out ---------- */
+const timers = new WeakMap();
+const cancel = el => { clearTimeout(timers.get(el)); };
+function typeIn(el){
+  cancel(el);
+  const full = el.dataset.type || '';
+  let i = 0;
+  el.classList.add('typing');
+  const step = () => {
+    el.textContent = full.slice(0, i++);
+    if (i <= full.length) timers.set(el, setTimeout(step, 22 + Math.random() * 28));
+    else el.classList.remove('typing');
+  };
+  step();
 }
-
-// Boot Sequence
-setTimeout(() => {
-  document.querySelectorAll('.term-line').forEach((el, idx) => {
-    setTimeout(() => el.classList.add('show'), idx * 400);
+function typeOut(el){
+  cancel(el);
+  const step = () => {
+    const s = el.textContent.slice(0, -1);
+    el.textContent = s;
+    if (s.length) timers.set(el, setTimeout(step, 14));
+    else el.classList.remove('typing');
+  };
+  el.classList.add('typing');
+  step();
+}
+const typeIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) typeIn(en.target);
+    else if (en.target.textContent.length) typeOut(en.target);
   });
-}, 500);
+}, {threshold:.6});
 
-setTimeout(() => {
-  document.getElementById('boot').classList.add('hide');
-  typeWriter();
-}, 2500);
+/* ---------- render ---------- */
+const sectionsEl = document.getElementById('sections');
+const chipsEl = document.getElementById('chips');
+const qEl = document.getElementById('q');
+const countEl = document.getElementById('count');
+const noneEl = document.getElementById('none');
+const sections = [];
+let total = 0, activeCat = '';
 
-// Search Filter
-document.getElementById('search').addEventListener('input', e => {
-  const val = e.target.value.toLowerCase();
-  document.querySelectorAll('.source-item').forEach(item => {
-    const match = item.dataset.name.toLowerCase().includes(val);
-    item.style.display = match ? 'flex' : 'none';
-  });
-  document.querySelectorAll('.card').forEach(card => {
-    const hasVisible = [...card.querySelectorAll('.source-item')].some(i => i.style.display !== 'none');
-    card.style.display = hasVisible ? 'block' : 'none';
-  });
+// hero typing
+document.querySelectorAll('[data-type]').forEach(el => {
+  el.dataset.type = el.dataset.type; // ya viene del HTML
+  el.textContent = '';
+  typeIO.observe(el);
 });
 
-// Music Toggle
-const music = document.getElementById('music');
-const soundBtn = document.getElementById('soundBtn');
-let isPlaying = false;
+Object.entries(registry).forEach(([cat, items]) => {
+  total += items.length;
+  const id = 's-' + norm(cat).replace(/[^a-z0-9]+/g,'-');
+  const sec = document.createElement('section');
+  sec.className = 'sec';
+  sec.id = id;
+  sec.dataset.cat = cat;
+  sec.innerHTML = `
+    <h2 class="sec-head" data-type="[ dir ] ${esc(cat)}/"></h2>
+    <p class="sec-meta">${items.length} entradas · $ ls -la</p>
+    <div class="list">
+      ${items.map(([name,url]) => `
+        <a class="row" href="${esc(url)}" target="_blank" rel="noopener noreferrer"
+           data-search="${esc(norm(name+' '+cat+' '+hostOf(url)))}">
+          <span class="pfx">&gt;</span>
+          <span class="txt">
+            <span class="name" data-raw="${esc(name)}">${esc(name)}</span>
+            <span class="host">${esc(hostOf(url))}</span>
+          </span>
+          <span class="go">[open]</span>
+        </a>`).join('')}
+    </div>`;
+  sectionsEl.appendChild(sec);
+  const h = sec.querySelector('.sec-head');
+  h.textContent = '';
+  typeIO.observe(h);
+  sections.push({sec, cat});
 
-soundBtn.addEventListener('click', () => {
-  if (!isPlaying) {
-    music.play().then(() => {
-      isPlaying = true;
-      soundBtn.classList.add('active');
-      soundBtn.innerHTML = '❚❚';
-    }).catch(err => console.log("Audio file missing or blocked"));
-  } else {
-    music.pause();
-    isPlaying = false;
-    soundBtn.classList.remove('active');
-    soundBtn.innerHTML = '♪';
+  const chip = document.createElement('button');
+  chip.className = 'chip'; chip.textContent = cat; chip.dataset.cat = cat;
+  chip.setAttribute('aria-pressed','false');
+  chipsEl.appendChild(chip);
+});
+const allChip = document.createElement('button');
+allChip.className = 'chip'; allChip.textContent = 'todo'; allChip.dataset.cat = '';
+allChip.setAttribute('aria-pressed','true');
+chipsEl.prepend(allChip);
+
+// filas aparecen en cascada al entrar
+const rowIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.querySelectorAll('.row').forEach((r,i) => setTimeout(() => r.classList.add('in'), i * 35));
+    rowIO.unobserve(en.target);
+  });
+}, {threshold:.1});
+sections.forEach(({sec}) => rowIO.observe(sec.querySelector('.list')));
+
+/* ---------- búsqueda ---------- */
+function applyFilter(){
+  const terms = norm(qEl.value.trim()).split(/\s+/).filter(Boolean);
+  let shown = 0;
+  sections.forEach(({sec, cat}) => {
+    const off = activeCat && cat !== activeCat;
+    let here = 0;
+    sec.querySelectorAll('.row').forEach(a => {
+      const ok = !off && terms.every(t => a.dataset.search.includes(t));
+      a.style.display = ok ? '' : 'none';
+      if (ok){ here++; shown++; }
+      const nameEl = a.querySelector('.name');
+      const raw = nameEl.dataset.raw;
+      if (terms.length && ok){
+        const n = norm(raw);
+        let idx = -1, len = 0;
+        for (const t of terms){ const i = n.indexOf(t); if (i >= 0){ idx = i; len = t.length; break; } }
+        nameEl.innerHTML = idx >= 0
+          ? esc(raw.slice(0,idx)) + '<mark>' + esc(raw.slice(idx,idx+len)) + '</mark>' + esc(raw.slice(idx+len))
+          : esc(raw);
+      } else nameEl.textContent = raw;
+    });
+    sec.classList.toggle('hidden', here === 0);
+  });
+  countEl.textContent = (terms.length || activeCat) ? `> ${shown} / ${total} coincidencias` : '';
+  noneEl.classList.toggle('show', shown === 0);
+}
+qEl.addEventListener('input', applyFilter);
+addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== qEl){ e.preventDefault(); qEl.focus(); }
+  if (e.key === 'Escape'){ qEl.value=''; activeCat=''; syncChips(); applyFilter(); qEl.blur(); }
+});
+function syncChips(){
+  chipsEl.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.cat === activeCat)));
+}
+chipsEl.addEventListener('click', e => {
+  const c = e.target.closest('.chip'); if (!c) return;
+  activeCat = c.dataset.cat; syncChips(); applyFilter();
+  if (activeCat) document.getElementById('s-' + norm(activeCat).replace(/[^a-z0-9]+/g,'-'))?.scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------- scroll: progreso y parallax ---------- */
+let ticking = false;
+function onScroll(){
+  if (ticking) return; ticking = true;
+  requestAnimationFrame(() => {
+    const max = root.scrollHeight - innerHeight;
+    root.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / innerHeight).toFixed(4) : 0);
+    const bar = document.getElementById('progress');
+    bar.style.setProperty('--p', max > 0 ? (scrollY / max).toFixed(4) : 0);
+    ticking = false;
+  });
+}
+addEventListener('scroll', onScroll, {passive:true});
+addEventListener('resize', onScroll);
+onScroll();
+
+/* ---------- lluvia de fondo (hero) ---------- */
+(() => {
+  const c = document.getElementById('rain');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { c.style.display = 'none'; return; }
+  const ctx = c.getContext('2d');
+  const chars = '01xL1F3<>/{}[];=#$%'.split('');
+  let cols = 0, drops = [], size = 16;
+  function resize(){
+    c.width = c.clientWidth; c.height = c.clientHeight;
+    cols = Math.floor(c.width / size);
+    drops = Array.from({length: cols}, () => Math.random() * -50);
   }
-});
+  resize();
+  addEventListener('resize', resize);
+  function draw(){
+    ctx.fillStyle = 'rgba(0,0,0,.08)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.fillStyle = '#00ff41';
+    ctx.font = size + 'px monospace';
+    for (let i = 0; i < cols; i++){
+      const ch = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillText(ch, i * size, drops[i] * size);
+      if (drops[i] * size > c.height && Math.random() > .975) drops[i] = 0;
+      drops[i] += .6;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-// Link Checker (Simulated due to CORS)
-const statuses = document.querySelectorAll('.status');
-statuses.forEach(s => {
-  s.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    const url = s.dataset.url;
-    s.className = 'status checking';
-    
-    // Simulate check with timeout because real fetch fails on CORS for most sites
-    setTimeout(() => {
-      // Randomly assign online/offline for visual effect since we can't really check cross-origin
-      // In a real backend app, this would be a server-side check.
-      const isUp = Math.random() > 0.1; 
-      s.className = isUp ? 'status online' : 'status offline';
-    }, 800);
-  });
-  
-  // Initial fake check
-  setTimeout(() => {
-     s.className = 'status online';
-  }, 1000 + Math.random()*2000);
+/* ---------- música de fondo ---------- */
+const bgm = document.getElementById('bgm');
+const volBtn = document.getElementById('vol');
+let started = false;
+bgm.volume = .35;
+function setVol(){
+  volBtn.textContent = started && !bgm.muted ? '[ MÚSICA: ON ]' : '[ MÚSICA: OFF ]';
+  volBtn.classList.toggle('on', started && !bgm.muted);
+}
+function startMusic(){
+  if (started) return;
+  bgm.play().then(() => { started = true; setVol(); }).catch(() => {});
+}
+// el navegador exige un gesto antes de reproducir con sonido
+['pointerdown','keydown','wheel','touchstart'].forEach(ev =>
+  addEventListener(ev, startMusic, {once:true, passive:true})
+);
+volBtn.addEventListener('click', () => {
+  if (!started){ startMusic(); return; }
+  bgm.muted = !bgm.muted;
+  setVol();
 });
-
+setVol();
 </script>
 </body>
 </html>
